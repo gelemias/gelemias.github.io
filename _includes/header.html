@@ -1,15 +1,24 @@
 <div id="particles-js">
   <div class="content">
       <h1>
+        <img class="profile-img" src="{{site.baseurl}}/assets/img/{% if site.pic %}{{ site.pic }}{% else %}profile.png{% endif %}" alt="profile picture" />
         <span class="site-title">{{site.username}}</span>
         <span class="site-description">{{site.user_title}}</span>
       </h1>
       <div class="icons-header">
         <a aria-label="Send me an email" href="mailto:{{site.email}}"><i class="icon fa fa-envelope-o"></i></a>
+        <p class="icon-label">Send me an email</p>
+
         <a aria-label="My LinkedIn" target="_blank" href="https://www.linkedin.com/in/{{site.linkedin_username}}"><i class="icon fa fa-linkedin" aria-hidden="true"></i></a>
-        <a aria-label="My Github" target="_blank" href="https://github.com/{{site.github_username}}"><i class="icon fa fa-github-alt" aria-hidden="true"></i></a>
+        <p class="icon-label">My LinkedIn</p>
+
+        <a aria-label="My Github" target="_blank" href="https://github.com/{{site.github_username}}"><i class="icon fa fa-github" aria-hidden="true"></i></a>
+        <p class="icon-label">My Github</p>
+
         <a aria-label="My Resume" target="_blank" href="http://guillermord.com/{{site.resume}}"><i class="icon fa fa-file-text-o" aria-hidden="true"></i></a>
+        <p class="icon-label">My Resume</p>
       </div>
+
       <!-- <a class="link" href="#about" data-scroll>About Me</a>
       <a class="link" href="#projects" data-scroll>Projects</a> -->
   </div>

@@ -1,10 +1,9 @@
 # Site settings
 title: Guillermo RD
 description: Guillermo R Delgad's Website.
-# baseurl: "/particle" # the subpath of your site, e.g. /blog
-# url: "localhost:3000" # the base hostname & protocol for your site e.g. http://willianjusten.com.br
 
 # User settings
+pic: profile.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
 username: Guillermo RD
 user_description: Guillermo R Delgad's Website.
 user_title: iOS Developer
