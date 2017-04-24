@@ -1,11 +1,11 @@
 # Site settings
 title: Guillermo RD
-description: Guillermo R Delgad's Website.
+description: Guillermo R Delgado's Website.
 
 # User settings
 pic: profile.png  #place a 100x100 picture inside /assets/images/ folder and provide the name of the file below
 username: Guillermo RD
-user_description: Guillermo R Delgad's Website.
+user_description: I am a freelance iOS Developer and Consultant with many years of experience working along with big and small businesses. I love looking for the cutting edge not only regarding development but also design-wise. These are several of my latest projects. Do not hesitate to fork me on github and contribute if you fancy!
 user_title: iOS Developer
 email: gelemias@gmail.com
 github_username:  gelemias
