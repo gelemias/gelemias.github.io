@@ -1,6 +1,21 @@
 <footer class="footer">
-    <p>&copy; {{site.username}}</p>
-    <p>Build with Jekyll and <span class="love">❤</span> by <a href="https://nrandecker.github.io">Nathan Randecker</a></p>
+  <div class="container">
+    <div class="row user-projects">
+      <div class="three columns">
+        <img class="client-logo" alt="T-Mobile" src="{{ "/assets/img/tmo-logo.png" | prepend: site.baseurl }}" />
+      </div>
+      <div class="three columns">
+        <img class="client-logo" alt="Tomtom" src="{{ "/assets/img/tt-logo.png" | prepend: site.baseurl }}" />
+      </div>
+      <div class="three columns">
+        <img class="client-logo" alt="Deusche Bank" src="{{ "/assets/img/db-logo.png" | prepend: site.baseurl }}" />
+      </div>
+      <div class="three columns">
+        <img class="client-logo" alt="Hewlett-Packard" src="{{ "/assets/img/hp-logo.png" | prepend: site.baseurl }}" />
+      </div>
+    </div>
+  </div>
+    <p>Build with <span class="love">❤</span> by {{site.username}}, based on <a href="https://nrandecker.github.io">Nathan Randecker</a> project</p>
 </footer>
 <script src="//cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script src="{{ "/assets/js/sweet-scroll.min.js" | prepend: site.baseurl }}"></script>
