@@ -5,7 +5,8 @@
       {
         "appID": "UBU62NE677.com.idemia.mobileid.dev",
         "paths": [
-          "*"
+          "*",
+          "/binding"
         ]
       }
     ]
