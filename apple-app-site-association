@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "UBU62NE677.com.idemia.mobileid.dev",
+        "paths": [
+          "*"
+        ]
+      }
+    ]
+  }
+}
