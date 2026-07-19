@@ -1,12 +1,15 @@
 /* ==========================================================================
    GUILLERMO R. DELGADO — hero toy
-   A low-poly Macintosh Classic (with keyboard + mouse) that floats behind the
-   name and reacts to the pointer. Self-hosted Three.js, no external requests.
-   Degrades to nothing if WebGL is unavailable; static if reduced-motion.
+   Loads a floating retro Macintosh (.glb) that reacts to the pointer.
+   Self-hosted Three.js + GLTFLoader — no external requests.
+   Degrades to nothing without WebGL; renders one static frame if reduced-motion;
+   pauses when the hero scrolls away or the tab is hidden.
 
-   Uses Three.js (r160, MIT) — vendored at assets/js/vendor/three.module.min.js
+   Model:  assets/models/retro-mac.glb  (vertex-coloured, ~52 KB)
+   Three.js (r160, MIT) — vendored under assets/js/vendor/
    ========================================================================== */
-import * as THREE from "/assets/js/vendor/three.module.min.js";
+import * as THREE from "three";
+import { GLTFLoader } from "/assets/js/vendor/GLTFLoader.js";
 
 const canvas = document.getElementById("mac3d");
 if (canvas) init(canvas);
@@ -25,128 +28,117 @@ function init(canvas) {
   const hero = canvas.closest(".hero") || canvas.parentElement;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-  camera.position.set(0, 0.6, 9.2);
-  camera.lookAt(0, 0.1, 0);
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 0.6, 11);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const renderer = new THREE.WebGLRenderer({
+    canvas, alpha: true, antialias: true, powerPreference: "high-performance"
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-  /* --- materials --------------------------------------------------------- */
-  const beige   = new THREE.MeshStandardMaterial({ color: 0xdcd5c4, roughness: 0.72, metalness: 0.02 });
-  const beigeHi = new THREE.MeshStandardMaterial({ color: 0xe7e1d2, roughness: 0.7,  metalness: 0.02 });
-  const dark    = new THREE.MeshStandardMaterial({ color: 0x24262b, roughness: 0.6,  metalness: 0.05 });
-  const bezel   = new THREE.MeshStandardMaterial({ color: 0x2b2d33, roughness: 0.5,  metalness: 0.1 });
-
-  const VOLT = 0xd7ff2e;
-
-  /* --- the machine ------------------------------------------------------- */
-  const mac = new THREE.Group();
-
-  const box = (w, h, d, mat, x = 0, y = 0, z = 0) => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-    m.position.set(x, y, z);
-    mac.add(m);
-    return m;
-  };
-
-  // main body
-  box(2.15, 3.0, 2.35, beige, 0, 0, 0);
-  // slightly proud front plate
-  box(2.0, 2.86, 0.06, beigeHi, 0, 0.02, 1.2);
-  // recessed screen bezel
-  box(1.72, 1.46, 0.14, bezel, 0, 0.58, 1.22);
-  // the glowing screen
-  const screenTex = makeScreenTexture();
-  const screen = new THREE.Mesh(
-    new THREE.PlaneGeometry(1.42, 1.12),
-    new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false })
-  );
-  screen.position.set(0, 0.6, 1.31);
-  mac.add(screen);
-  // floppy slot
-  box(0.92, 0.07, 0.06, dark, 0.2, -0.5, 1.24);
-  // chin brand groove
-  box(1.15, 0.02, 0.04, bezel, 0, -0.98, 1.23);
-  // little rainbow tab (volt accent)
-  box(0.12, 0.22, 0.05, new THREE.MeshBasicMaterial({ color: VOLT, toneMapped: false }), -0.78, -0.86, 1.24);
-  // top vents
-  for (let i = 0; i < 5; i++) box(1.3, 0.03, 0.03, bezel, 0, 1.32, -0.7 + i * 0.28);
-
-  // keyboard
-  const kb = box(2.55, 0.16, 0.92, beigeHi, 0, -1.62, 2.35);
-  kb.rotation.x = -0.04;
-  const kbTex = makeKeyboardTexture();
-  const kbTop = new THREE.Mesh(
-    new THREE.PlaneGeometry(2.5, 0.86),
-    new THREE.MeshStandardMaterial({ map: kbTex, roughness: 0.8 })
-  );
-  kbTop.rotation.x = -Math.PI / 2 - 0.04;
-  kbTop.position.set(0, -1.53, 2.35);
-  mac.add(kbTop);
-
-  // mouse
-  const mouse = box(0.44, 0.17, 0.56, beigeHi, 1.72, -1.6, 2.15);
-  box(0.16, 0.02, 0.22, bezel, 1.72, -1.5, 2.05); // button groove
-  // mouse cable
-  const curve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(1.72, -1.6, 1.9),
-    new THREE.Vector3(1.55, -1.66, 2.05),
-    new THREE.Vector3(1.3, -1.62, 2.25),
-    new THREE.Vector3(1.2, -1.6, 2.35),
-  ]);
-  const cable = new THREE.Mesh(
-    new THREE.TubeGeometry(curve, 24, 0.02, 6, false),
-    new THREE.MeshStandardMaterial({ color: 0x1c1e22, roughness: 0.7 })
-  );
-  mac.add(cable);
-
-  // base orientation (three-quarter view)
-  const BASE_RY = -0.42, BASE_RX = 0.14;
-  mac.rotation.set(BASE_RX, BASE_RY, 0);
-  scene.add(mac);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.06;
 
   /* --- lights ------------------------------------------------------------ */
-  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-  const key = new THREE.DirectionalLight(0xffffff, 2.1);
-  key.position.set(-4, 6, 6);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8173, 2.6));
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  const key = new THREE.DirectionalLight(0xffffff, 3.4);
+  key.position.set(-5, 8, 7);
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xbfd0ff, 0.5);
-  fill.position.set(5, -2, 3);
-  scene.add(fill);
-  const rim = new THREE.PointLight(VOLT, 26, 20, 2);   // neon edge
-  rim.position.set(3.4, 1.6, -2.2);
-  scene.add(rim);
+  const rimc = new THREE.DirectionalLight(0xb8c6d7, 1.8);
+  rimc.position.set(6, 2, -5);
+  scene.add(rimc);
+  const volt = new THREE.PointLight(0xd7ff2e, 14, 26, 2);   // subtle brand edge
+  volt.position.set(4.6, 2.6, -3);
+  scene.add(volt);
 
-  /* --- responsive sizing ------------------------------------------------- */
-  let baseY = 0;
+  /* --- palette (assigned by mesh name; the .glb ships no materials) ------ */
+  const beige     = new THREE.MeshStandardMaterial({ color: 0xcfc4ad, roughness: 0.62, metalness: 0.02 });
+  const beigeDark = new THREE.MeshStandardMaterial({ color: 0xa89f8b, roughness: 0.68, metalness: 0.02 });
+  const keyMat    = new THREE.MeshStandardMaterial({ color: 0xd8ceb9, roughness: 0.7,  metalness: 0.02 });
+  const dark      = new THREE.MeshStandardMaterial({ color: 0x1f2427, roughness: 0.45, metalness: 0.05 });
+  const cableMat  = new THREE.MeshStandardMaterial({ color: 0xb8ad98, roughness: 0.72, metalness: 0.02 });
+  const screenGlow = new THREE.MeshStandardMaterial({
+    color: 0xa9c5ce, emissive: 0x6c8f9b, emissiveIntensity: 0.6, roughness: 0.36, metalness: 0
+  });
+  const materialFor = (n) => {
+    if (/screen/.test(n)) return screenGlow;
+    if (/bezel|floppy/.test(n)) return dark;
+    if (/cable/.test(n)) return cableMat;
+    if (/^key_|space_bar/.test(n)) return keyMat;
+    if (/computer_base|lower_panel|mouse_button/.test(n)) return beigeDark;
+    return beige;   // case, keyboard_base, mouse_body, vents
+  };
+
+  /* --- rig + model ------------------------------------------------------- */
+  const rig = new THREE.Group();
+  scene.add(rig);
+  let model = null;
+  const BASE_RY = 0.12, BASE_RX = -0.04;
+
+  new GLTFLoader().load(
+    "/assets/models/retro-mac.glb",
+    (gltf) => {
+      model = gltf.scene;
+      model.traverse((o) => {
+        if (!o.isMesh) return;
+        o.castShadow = o.receiveShadow = false;
+        // the .glb ships no normals — lighting needs them
+        if (o.geometry && !o.geometry.attributes.normal) o.geometry.computeVertexNormals();
+        o.material = materialFor(o.name || "");
+      });
+      // centre the assembly on the rig origin
+      const box = new THREE.Box3().setFromObject(model);
+      box.getCenter(model.position).multiplyScalar(-1);
+      rig.add(model);
+      resize();
+      canvas.classList.add("ready");
+      if (reduce) draw();
+    },
+    undefined,
+    () => { /* model failed to load — hero still fine */ }
+  );
+
+  /* --- pointer + responsive framing -------------------------------------- */
+  const pointer = new THREE.Vector2();
+  const smooth = new THREE.Vector2();
+  window.addEventListener("pointermove", (e) => {
+    pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+    pointer.y = -((e.clientY / window.innerHeight) * 2 - 1);
+  }, { passive: true });
+
+  let baseY = 0, camBaseY = 0.6;
   function resize() {
     const w = hero.clientWidth, h = hero.clientHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // frame the toy: sit it to the right on wide screens, smaller / higher on narrow
-    const wide = w / h;
-    const s = THREE.MathUtils.clamp(w / 1500, 0.62, 1.15);
-    mac.scale.setScalar(s);
-    mac.position.x = wide > 1.1 ? 1.7 * s : 0.1;
-    baseY = wide > 1.1 ? 0.15 : 0.9;
-    mac.position.y = baseY;
+    const wide = w / h > 1.1;
+    if (wide) {
+      camera.position.z = 11;  camBaseY = 0.6;
+      rig.position.x = 1.9;    rig.scale.setScalar(1.0);
+      baseY = 0.1;
+    } else {
+      camera.position.z = 14;  camBaseY = 0.4;
+      rig.position.x = 0.2;    rig.scale.setScalar(0.82);
+      baseY = 0.6;
+    }
+    rig.position.y = baseY;
     camera.updateProjectionMatrix();
   }
   resize();
   window.addEventListener("resize", resize, { passive: true });
 
-  /* --- reduced motion: one static frame ---------------------------------- */
-  if (reduce) { renderer.render(scene, camera); canvas.classList.add("ready"); return; }
+  const draw = () => renderer.render(scene, camera);
 
-  /* --- pointer parallax + idle float ------------------------------------- */
-  const pointer = { x: 0, y: 0 }, target = { x: 0, y: 0 };
-  window.addEventListener("pointermove", (e) => {
-    pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-    pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
-  }, { passive: true });
+  /* --- reduced motion: static (draw happens once the model is in) -------- */
+  if (reduce) {
+    rig.rotation.set(BASE_RX, BASE_RY, 0);
+    camera.lookAt(0, 0, 0);
+    draw();
+    return;
+  }
 
+  /* --- animation loop ---------------------------------------------------- */
   let running = false, raf = 0;
   const clock = new THREE.Clock();
 
@@ -154,93 +146,28 @@ function init(canvas) {
     if (!running) return;
     raf = requestAnimationFrame(frame);
     const t = clock.getElapsedTime();
+    smooth.lerp(pointer, 0.06);
+    const px = smooth.x, py = smooth.y;
 
-    target.x = BASE_RY + pointer.x * 0.55 + Math.sin(t * 0.35) * 0.05;
-    target.y = BASE_RX - pointer.y * 0.32 + Math.sin(t * 0.5) * 0.03;
-    mac.rotation.y += (target.x - mac.rotation.y) * 0.06;
-    mac.rotation.x += (target.y - mac.rotation.x) * 0.06;
-    mac.position.y = baseY + Math.sin(t * 0.8) * 0.09;
+    rig.rotation.y += ((BASE_RY + px * 0.33) - rig.rotation.y) * 0.05;
+    rig.rotation.x += ((BASE_RX - py * 0.20) - rig.rotation.x) * 0.05;
+    rig.position.y = baseY + Math.sin(t * 0.75) * 0.12;
 
-    renderer.render(scene, camera);
+    camera.position.x += ((px * 0.5) - camera.position.x) * 0.03;
+    camera.position.y += ((camBaseY + py * 0.25) - camera.position.y) * 0.03;
+    camera.lookAt(0, -0.1, 0);
+
+    draw();
   }
 
-  function start() { if (!running) { running = true; clock.getDelta(); frame(); } }
+  function start() { if (!running) { running = true; frame(); } }
   function stop()  { running = false; cancelAnimationFrame(raf); }
 
-  // pause when the hero scrolls out of view or the tab is hidden
   if ("IntersectionObserver" in window) {
-    new IntersectionObserver((en) => {
-      en[0].isIntersecting ? start() : stop();
-    }, { threshold: 0.01 }).observe(hero);
+    new IntersectionObserver((en) => { en[0].isIntersecting ? start() : stop(); },
+      { threshold: 0.01 }).observe(hero);
   }
-  document.addEventListener("visibilitychange", () => {
-    document.hidden ? stop() : start();
-  });
+  document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
 
-  start();                  // kick off
-  requestAnimationFrame(() => canvas.classList.add("ready"));
-}
-
-/* ==========================================================================
-   Textures
-   ========================================================================== */
-function makeScreenTexture() {
-  const c = document.createElement("canvas");
-  c.width = c.height = 256;
-  const g = c.getContext("2d");
-  // dark CRT
-  g.fillStyle = "#0a0f0a"; g.fillRect(0, 0, 256, 256);
-  const grad = g.createRadialGradient(128, 120, 20, 128, 128, 170);
-  grad.addColorStop(0, "#12210f"); grad.addColorStop(1, "#080b08");
-  g.fillStyle = grad; g.fillRect(0, 0, 256, 256);
-
-  // Happy Mac
-  g.strokeStyle = "#d7ff2e"; g.fillStyle = "#d7ff2e";
-  g.lineWidth = 7; g.lineJoin = "round";
-  roundRect(g, 86, 70, 84, 104, 10); g.stroke();          // little mac body
-  roundRect(g, 98, 84, 60, 46, 6); g.stroke();            // its screen
-  g.fillRect(150, 150, 10, 5);                            // disk slot
-  // smiley in the tiny screen
-  g.fillRect(112, 100, 6, 6); g.fillRect(138, 100, 6, 6); // eyes
-  g.lineWidth = 5;
-  g.beginPath(); g.arc(128, 108, 12, 0.15 * Math.PI, 0.85 * Math.PI); g.stroke();
-
-  // scanlines
-  g.globalAlpha = 0.09; g.fillStyle = "#000";
-  for (let y = 0; y < 256; y += 4) g.fillRect(0, y, 256, 2);
-  g.globalAlpha = 1;
-
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
-
-function makeKeyboardTexture() {
-  const c = document.createElement("canvas");
-  c.width = 512; c.height = 176;
-  const g = c.getContext("2d");
-  g.fillStyle = "#e7e1d2"; g.fillRect(0, 0, 512, 176);
-  g.fillStyle = "#cfc7b4";
-  const cols = 15, rows = 4, m = 12, kw = (512 - m * 2) / cols, kh = 30, gap = 3;
-  for (let r = 0; r < rows; r++) {
-    for (let col = 0; col < cols; col++) {
-      const x = m + col * kw + gap, y = 14 + r * (kh + gap);
-      const w = (r === rows - 1 && col === 4) ? kw * 6 - gap * 2 : kw - gap * 2; // spacebar
-      if (r === rows - 1 && col > 4 && col < 10) continue;
-      roundRect(g, x, y, w, kh - gap, 4); g.fill();
-    }
-  }
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
-}
-
-function roundRect(g, x, y, w, h, r) {
-  g.beginPath();
-  g.moveTo(x + r, y);
-  g.arcTo(x + w, y, x + w, y + h, r);
-  g.arcTo(x + w, y + h, x, y + h, r);
-  g.arcTo(x, y + h, x, y, r);
-  g.arcTo(x, y, x + w, y, r);
-  g.closePath();
+  start();
 }
