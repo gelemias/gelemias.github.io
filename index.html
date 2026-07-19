@@ -3,328 +3,467 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Guillermo Rodriguez Delgado — iOS Software Engineer</title>
-  <meta name="description" content="Guillermo Rodriguez Delgado — iOS Software Engineer and Mobile Architect with 14+ years of experience building high-quality mobile applications.">
+  <title>Guillermo Rodriguez Delgado — iOS Engineer &amp; Mobile Architect</title>
+  <meta name="description" content="Guillermo Rodriguez Delgado — iOS Software Engineer and Mobile Architect with 14+ years building high-quality, secure mobile software. Digital identity, SwiftUI, game dev.">
+  <meta name="theme-color" content="#08080a">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Guillermo Rodriguez Delgado — iOS Engineer &amp; Mobile Architect">
+  <meta property="og:description" content="14+ years building high-quality, secure mobile software. Digital identity, SwiftUI, game dev.">
+  <meta property="og:image" content="/assets/img/profile.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
+  <!-- ============================ NAV / HUD ============================ -->
   <header class="nav">
     <div class="container nav-inner">
-      <a class="nav-brand" href="/">Guillermo RD</a>
+      <a class="nav-brand" href="/">GRD<span class="idx">/ P01</span></a>
       <nav class="nav-links">
-        <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="/support/">Support</a>
+        <a href="#about"      data-n="01">Dossier</a>
+        <a href="#experience" data-n="02">Career</a>
+        <a href="#projects"   data-n="03">Garage</a>
+        <a href="#skills"     data-n="04">Spec</a>
+        <a href="#contact"    data-n="05">Contact</a>
       </nav>
+      <div class="nav-status">
+        <span class="status-dot">Available</span>
+        <span class="clock" id="clock">--:--:--</span>
+      </div>
+      <div class="scroll-progress" id="progress"></div>
     </div>
   </header>
 
   <main>
 
-    <div class="hero">
+    <!-- ============================ HERO ============================ -->
+    <section class="hero" id="top">
+      <div class="hero-glow a"></div>
+      <div class="hero-glow b"></div>
       <div class="container">
-        <img class="profile-img" src="/assets/img/profile.png" alt="Portrait of Guillermo Rodriguez Delgado">
-        <h1>Guillermo Rodriguez Delgado</h1>
-        <p class="tagline">iOS Software Engineer &amp; Mobile Architect</p>
-        <p class="location">Lodz, Poland</p>
-        <div class="hero-links">
-          <a href="mailto:gelemias@gmail.com">
+
+        <div class="hero-kicker reveal">
+          <span class="bar"></span>
+          <span>iOS Engineer</span> · <b>Mobile Architect</b> · Łódź, PL
+        </div>
+
+        <h1 class="hero-name reveal">
+          <span class="l1">Guillermo</span>
+          <span class="l2">Rodriguez</span>
+        </h1>
+
+        <p class="hero-role reveal" id="typewriter" aria-label="Building government-grade digital identity">
+          <span id="type"></span><span class="cursor" aria-hidden="true">&nbsp;</span>
+        </p>
+
+        <div class="hero-meta reveal">
+          <span>14+ Years Shipping</span>
+          <span>Digital Identity</span>
+          <span>51.76° N, 19.46° E</span>
+        </div>
+
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="#contact">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-8 5-8-5V6l8 5 8-5v2.24z"/></svg>
-            Email
+            Get in touch
           </a>
-          <a href="https://www.linkedin.com/in/guillermoRD" target="_blank" rel="noopener">
+          <a class="btn" href="https://www.linkedin.com/in/guillermoRD" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
             LinkedIn
           </a>
-          <a href="https://github.com/gelemias" target="_blank" rel="noopener">
+          <a class="btn" href="https://github.com/gelemias" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
             GitHub
           </a>
         </div>
+
+        <div class="hero-scroll reveal"><span class="line"></span> Scroll to engage</div>
+      </div>
+    </section>
+
+    <!-- ============================ TICKER ============================ -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>Swift</span><span>SwiftUI</span><span>Digital Identity</span><span>ISO 18013</span><span>Verifiable Credentials</span><span>Secure Architecture</span><span>Objective-C</span><span>Godot</span><span>Performance</span><span>NFC</span><span>Biometrics</span>
+        <span>Swift</span><span>SwiftUI</span><span>Digital Identity</span><span>ISO 18013</span><span>Verifiable Credentials</span><span>Secure Architecture</span><span>Objective-C</span><span>Godot</span><span>Performance</span><span>NFC</span><span>Biometrics</span>
       </div>
     </div>
 
+    <!-- ============================ STATS ============================ -->
+    <section id="stats" style="padding-top:72px;">
+      <div class="container">
+        <div class="stats reveal">
+          <div class="stat">
+            <div class="stat-num"><span data-count="14">0</span><span class="suffix">+</span></div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span data-count="20">0</span><span class="suffix">+</span></div>
+            <div class="stat-label">Apps Shipped</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span data-count="6">0</span></div>
+            <div class="stat-label">Companies</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num"><span data-count="4">0</span></div>
+            <div class="stat-label">Open-Source Repos</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ ABOUT / DOSSIER ============================ -->
     <section id="about">
       <div class="container">
-        <h2 class="section-title">About</h2>
-        <p class="section-lead">
-          I've spent 14+ years building mobile software, and these days I lead iOS at IDEMIA,
-          designing the architecture behind government-grade digital identity — wallets,
-          verifiable credentials and ISO 18013 mDoc flows, where security, performance and
-          long-term maintainability aren't features but the product itself.
-        </p>
-        <p class="section-lead">
-          After hours I keep the craft playful: a pixel-art virtual pet that teaches kids math
-          in SwiftUI, an isometric defense game in Godot, and open-source tooling for testing
-          identity-wallet interoperability. Whatever the project, the through-line is the same —
-          a strong focus on UI and custom-built components, choosing the right approach for each
-          specific need rather than the fashionable one.
-        </p>
-      </div>
-    </section>
+        <div class="sec-head reveal">
+          <div class="sec-tag"><span class="num">01</span><span class="bar"></span> Driver Dossier</div>
+          <h2 class="sec-title">The Profile</h2>
+        </div>
 
-    <section id="experience" class="alt">
-      <div class="container">
-        <h2 class="section-title">Experience</h2>
-        <div class="timeline">
+        <div class="dossier">
+          <aside class="dossier-meta reveal">
+            <div class="row"><span class="k">Role</span><span class="v">Mobile Architect</span></div>
+            <div class="row"><span class="k">Base</span><span class="v">Łódź, Poland</span></div>
+            <div class="row"><span class="k">Team</span><span class="v">IDEMIA · iOS</span></div>
+            <div class="row"><span class="k">Focus</span><span class="v">Digital Identity</span></div>
+            <div class="row"><span class="k">Since</span><span class="v">2011</span></div>
+            <div class="row"><span class="k">Status</span><span class="v on">Available</span></div>
+          </aside>
 
-          <div class="timeline-item">
-            <h3>Mobile Architect, iOS</h3>
-            <p class="meta"><strong>IDEMIA</strong> · Lodz, Poland · 05/2023 – Present</p>
-            <p>Designing technical architecture and managing hard engineering problems for
-            large-scale digital identity platforms.</p>
-            <ul>
-              <li>Own and lead architecture decisions on non-functional aspects: performance, high availability, resiliency and security.</li>
-              <li>Analyze functional and business requirements and choose the appropriate architecture and technologies.</li>
-              <li>Monitor and enforce architectural and technological consistency across all platform components.</li>
-              <li>Drive code review processes to ensure the best software quality.</li>
-            </ul>
+          <div class="dossier-body reveal">
+            <p>I've spent <strong>14+ years</strong> building mobile software, and these days I
+            lead iOS at <strong>IDEMIA</strong>, designing the architecture behind
+            <span class="hl">government-grade digital identity</span> — wallets, verifiable
+            credentials and ISO 18013 mDoc flows, where security, performance and long-term
+            maintainability aren't features but the product itself.</p>
+
+            <p>After hours I keep the craft playful: a pixel-art virtual pet that teaches kids
+            math in SwiftUI, an isometric defense game in Godot, and open-source tooling for
+            testing identity-wallet interoperability. Whatever the project, the through-line is
+            the same — a strong focus on <strong>UI and custom-built components</strong>, choosing
+            the right approach for each specific need rather than the fashionable one.</p>
+
+            <p>Off the screen you'll find me chasing splits on a run and Sunday-morning race
+            starts — the same instinct for precision, pace and clean lines that I bring to
+            every build.</p>
           </div>
-
-          <div class="timeline-item">
-            <h3>Senior Software Developer, iOS</h3>
-            <p class="meta"><strong>IDEMIA</strong> · Lodz, Poland · 05/2018 – 05/2023</p>
-            <p>Delivered quality software within the timeframe committed by the team.</p>
-            <ul>
-              <li>Delivered features in cooperation with Product Owners and Functional Analysts, backed by tests and thorough code review.</li>
-              <li>Implemented and improved non-functional product items: high availability, performance and platform monitoring.</li>
-              <li>Contributed to common libraries used across products while keeping technical debt low.</li>
-            </ul>
-          </div>
-
-          <div class="timeline-item">
-            <h3>iOS Developer &amp; Consultant</h3>
-            <p class="meta"><strong>Freelance</strong> · 2011 – 2018</p>
-            <p>Worked with international organizations and individuals as a freelance iOS developer
-            and consultant, with a track record of on-time and on-budget projects.</p>
-          </div>
-
-          <div class="timeline-item">
-            <h3>Senior iOS Software Engineer</h3>
-            <p class="meta"><strong>Mobica</strong> · Lodz, Poland · 12/2014 – 04/2018</p>
-            <p>Engineering and consultancy services spanning the breadth of software design,
-            engineering and testing.</p>
-          </div>
-
-          <div class="timeline-item">
-            <h3>iOS Software Engineer</h3>
-            <p class="meta"><strong>Rule Financial</strong> · Lodz, Poland · 11/2013 – 11/2014</p>
-            <p>Technical consulting and IT services for investment banks, asset and wealth
-            management, and related financial institutions.</p>
-          </div>
-
-          <div class="timeline-item">
-            <h3>Software Engineer</h3>
-            <p class="meta"><strong>Hewlett-Packard</strong> · Leon, Spain · 04/2011 – 10/2013</p>
-            <p>Worked on the Windows desktop application for large-format printers, focused on UI,
-            using Windows Presentation Foundation.</p>
-          </div>
-
         </div>
       </div>
     </section>
 
+    <!-- ============================ EXPERIENCE / CAREER LAPS ============================ -->
+    <section id="experience">
+      <div class="container">
+        <div class="sec-head reveal">
+          <div class="sec-tag"><span class="num">02</span><span class="bar"></span> Career Laps</div>
+          <h2 class="sec-title">The Grid</h2>
+          <p class="sec-sub">Fifteen years on track, from large-format printers to nation-scale digital identity.</p>
+        </div>
+
+        <div class="laps">
+          <article class="lap reveal">
+            <div class="lap-num">01</div>
+            <div>
+              <h3 class="lap-role">Mobile Architect, iOS</h3>
+              <p class="lap-meta"><span class="co">IDEMIA</span> · Łódź, Poland <span class="split">05/2023 — Present</span></p>
+              <p class="lap-body">Designing technical architecture and owning the hard engineering problems for large-scale digital-identity platforms.</p>
+              <ul>
+                <li>Own architecture decisions on non-functional aspects: performance, high availability, resiliency and security.</li>
+                <li>Translate functional and business requirements into the right architecture and technologies.</li>
+                <li>Enforce architectural and technological consistency across every platform component.</li>
+                <li>Drive code-review processes to guarantee the best software quality.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="lap reveal">
+            <div class="lap-num">02</div>
+            <div>
+              <h3 class="lap-role">Senior Software Developer, iOS</h3>
+              <p class="lap-meta"><span class="co">IDEMIA</span> · Łódź, Poland <span class="split">05/2018 — 05/2023</span></p>
+              <p class="lap-body">Delivered quality software within the timeframe committed by the team.</p>
+              <ul>
+                <li>Shipped features with Product Owners and Functional Analysts, backed by tests and thorough review.</li>
+                <li>Implemented and improved non-functional items: high availability, performance and platform monitoring.</li>
+                <li>Contributed to common libraries used across products while keeping technical debt low.</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="lap reveal">
+            <div class="lap-num">03</div>
+            <div>
+              <h3 class="lap-role">iOS Developer &amp; Consultant</h3>
+              <p class="lap-meta"><span class="co">Freelance</span> · Remote <span class="split">2011 — 2018</span></p>
+              <p class="lap-body">Worked with international organizations and individuals as a freelance iOS developer and consultant, with a track record of on-time, on-budget delivery.</p>
+            </div>
+          </article>
+
+          <article class="lap reveal">
+            <div class="lap-num">04</div>
+            <div>
+              <h3 class="lap-role">Senior iOS Software Engineer</h3>
+              <p class="lap-meta"><span class="co">Mobica</span> · Łódź, Poland <span class="split">12/2014 — 04/2018</span></p>
+              <p class="lap-body">Engineering and consultancy services spanning the breadth of software design, engineering and testing.</p>
+            </div>
+          </article>
+
+          <article class="lap reveal">
+            <div class="lap-num">05</div>
+            <div>
+              <h3 class="lap-role">iOS Software Engineer</h3>
+              <p class="lap-meta"><span class="co">Rule Financial</span> · Łódź, Poland <span class="split">11/2013 — 11/2014</span></p>
+              <p class="lap-body">Technical consulting and IT services for investment banks, asset and wealth management, and related financial institutions.</p>
+            </div>
+          </article>
+
+          <article class="lap reveal">
+            <div class="lap-num">06</div>
+            <div>
+              <h3 class="lap-role">Software Engineer</h3>
+              <p class="lap-meta"><span class="co">Hewlett-Packard</span> · León, Spain <span class="split">04/2011 — 10/2013</span></p>
+              <p class="lap-body">Built the Windows desktop application for large-format printers, focused on UI, using Windows Presentation Foundation.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ PROJECTS / GARAGE ============================ -->
     <section id="projects">
       <div class="container">
-        <h2 class="section-title">Projects</h2>
-        <div class="grid">
+        <div class="sec-head reveal">
+          <div class="sec-tag"><span class="num">03</span><span class="bar"></span> The Garage</div>
+          <h2 class="sec-title">Selected Builds</h2>
+          <p class="sec-sub">Products shipped, tools open-sourced, games built for the joy of it.</p>
+        </div>
 
-          <div class="card">
-            <h3><a href="/support/sumo.html">Sumo</a></h3>
-            <p>Virtual-pet learning game for iOS. A child opens a mystery pack and cares for its
-            mascot by completing short bursts of multiple-choice math problems, with invisibly
-            adaptive difficulty. Local-only, no accounts, no ads — a cheerful pixel-art
-            experience for ages 4–12.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">SwiftUI</span><span class="tag">Education</span><span class="tag">Kids</span></div>
-          </div>
+        <div class="filters reveal" role="tablist" aria-label="Filter projects">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="ios">iOS</button>
+          <button class="filter" data-filter="identity">Digital Identity</button>
+          <button class="filter" data-filter="oss">Open Source</button>
+          <button class="filter" data-filter="games">Games</button>
+        </div>
 
-          <div class="card">
-            <h3>Turn Siege</h3>
-            <p>Fast-loading, bite-sized isometric defense game built with Godot 4. Your gas
-            station sits on a four-front battlefield but you can only cover the two fronts
-            facing you — swipe to spin the view and bring your guns to bear. Fully procedural
-            graphics and daily streak rewards.</p>
-            <div class="tags"><span class="tag">Godot</span><span class="tag">Game Dev</span><span class="tag">iOS</span></div>
-          </div>
+        <div class="grid" id="grid">
 
-          <div class="card">
-            <h3><a href="https://github.com/gelemias/mdoc-verifier" target="_blank" rel="noopener">mdoc-verifier</a></h3>
-            <p>Open-source FastAPI demo verifier for ISO 18013 web retrieval flows — generates
-            <code>mdoc://</code> QR deep links, derives session keys and exchanges encrypted CBOR
-            DeviceRequests to test wallet interoperability for PhotoID-style requests.</p>
-            <div class="tags"><span class="tag">Open Source</span><span class="tag">Python</span><span class="tag">ISO 18013</span><span class="tag">Digital Identity</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios games">
+            <div class="card-media ph ph-game"><span class="ph-glyph">►</span><span class="ph-label">SwiftUI Game</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 01</div>
+              <h3><a href="/support/sumo.html">Sumo</a></h3>
+              <p>Virtual-pet learning game for iOS. A child opens a mystery pack and cares for its mascot by completing short bursts of multiple-choice math, with invisibly adaptive difficulty. Local-only, no accounts, no ads — cheerful pixel-art for ages 4–12.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">SwiftUI</span><span class="tag">Education</span><span class="tag">Kids</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3><a href="https://github.com/gelemias/b64img" target="_blank" rel="noopener">b64img</a></h3>
-            <p>Simple, no-frills base64 image decoder — paste an encoded string, get your
-            image back.</p>
-            <div class="tags"><span class="tag">Open Source</span><span class="tag">Utility</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios games">
+            <div class="card-media ph ph-game"><span class="ph-glyph">►</span><span class="ph-label">Godot 4</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 02</div>
+              <h3>Turn Siege</h3>
+              <p>Fast-loading, bite-sized isometric defense game built with Godot 4. Your gas station sits on a four-front battlefield but you can only cover two fronts at once — swipe to spin the view and bring your guns to bear. Fully procedural graphics and daily streak rewards.</p>
+              <div class="tags"><span class="tag">Godot</span><span class="tag">Game Dev</span><span class="tag">iOS</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3><a href="https://apps.apple.com/pl/app/ips-id-wallet/id6758149983" target="_blank" rel="noopener">ID Wallet</a></h3>
-            <p>Secure digital identity wallet for managing verifiable credentials and identity
-            documents — identity proofing through document scanning, NFC passport/ID verification
-            and biometric authentication, with consent-driven attribute sharing.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Digital Identity</span><span class="tag">NFC</span><span class="tag">Biometrics</span></div>
-          </div>
+          <article class="card project reveal" data-cat="oss identity">
+            <div class="card-media ph ph-oss"><span class="ph-glyph">&lt;/&gt;</span><span class="ph-label">Open Source</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 03</div>
+              <h3><a href="https://github.com/gelemias/mdoc-verifier" target="_blank" rel="noopener">mdoc-verifier<span class="ext">↗</span></a></h3>
+              <p>Open-source FastAPI demo verifier for ISO 18013 web-retrieval flows — generates <code>mdoc://</code> QR deep links, derives session keys and exchanges encrypted CBOR DeviceRequests to test wallet interoperability for PhotoID-style requests.</p>
+              <div class="tags"><span class="tag">Open Source</span><span class="tag">Python</span><span class="tag">ISO 18013</span><span class="tag">Identity</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3><a href="https://www.idemia.com/mobile-id" target="_blank" rel="noopener">Mobile ID</a></h3>
-            <p>A contactless, highly secure, government-approved personal credential living on the
-            user's smartphone. Multi-modular components distributed as an SDK for integrators or
-            as a theme-able application.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">SDK</span><span class="tag">Security</span></div>
-          </div>
+          <article class="card project reveal" data-cat="oss">
+            <div class="card-media ph ph-oss"><span class="ph-glyph">&lt;/&gt;</span><span class="ph-label">Open Source</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 04</div>
+              <h3><a href="https://github.com/gelemias/b64img" target="_blank" rel="noopener">b64img<span class="ext">↗</span></a></h3>
+              <p>Simple, no-frills base64 image decoder — paste an encoded string, get your image back.</p>
+              <div class="tags"><span class="tag">Open Source</span><span class="tag">Utility</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3><a href="https://github.com/gelemias/RDGliderViewController" target="_blank" rel="noopener">RDGliderViewController</a></h3>
-            <p>Open-source responsive control, written in both Swift and Objective-C, for a
-            draggable view controller gliding over another view controller.</p>
-            <div class="tags"><span class="tag">Open Source</span><span class="tag">Swift</span><span class="tag">Objective-C</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios identity">
+            <div class="card-media ph ph-id"><span class="ph-glyph">◈</span><span class="ph-label">Digital Identity</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 05</div>
+              <h3><a href="https://apps.apple.com/pl/app/ips-id-wallet/id6758149983" target="_blank" rel="noopener">ID Wallet<span class="ext">↗</span></a></h3>
+              <p>Secure digital-identity wallet for managing verifiable credentials and identity documents — identity proofing through document scanning, NFC passport/ID verification and biometric authentication, with consent-driven attribute sharing.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Identity</span><span class="tag">NFC</span><span class="tag">Biometrics</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3><a href="https://www.t-mobiletuesdays.com/" target="_blank" rel="noopener">T-Mobile Tuesdays</a></h3>
-            <p>Highly acclaimed app in the USA offering vouchers and discounts to users — reached
-            the Top 50 in the App Store several times.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Consumer</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios identity">
+            <div class="card-media ph ph-id"><span class="ph-glyph">◈</span><span class="ph-label">Digital Identity</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 06</div>
+              <h3><a href="https://www.idemia.com/mobile-id" target="_blank" rel="noopener">Mobile ID<span class="ext">↗</span></a></h3>
+              <p>A contactless, highly secure, government-approved personal credential living on the user's smartphone. Multi-modular components distributed as an SDK for integrators or as a theme-able application.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">SDK</span><span class="tag">Security</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3><a href="https://www.tomtom.com/" target="_blank" rel="noopener">TomTom MyDrive</a></h3>
-            <p>TomTom's client for the MyDrive service — plan a route from your device, then read
-            it on your navigation device.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Navigation</span></div>
-          </div>
+          <article class="card project reveal" data-cat="oss">
+            <div class="card-media"><img src="/assets/img/tGlider.webp" loading="lazy" decoding="async" alt="RDGliderViewController — draggable glider control demo"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 07</div>
+              <h3><a href="https://github.com/gelemias/RDGliderViewController" target="_blank" rel="noopener">RDGliderViewController<span class="ext">↗</span></a></h3>
+              <p>Open-source responsive control, written in both Swift and Objective-C, for a draggable view controller gliding over another view controller.</p>
+              <div class="tags"><span class="tag">Open Source</span><span class="tag">Swift</span><span class="tag">Objective-C</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>Jumpy Chewie</h3>
-            <p>Universal game for iOS built with SpriteKit, featuring Game Center connectivity,
-            push notifications and in-app purchases.</p>
-            <div class="tags"><span class="tag">SpriteKit</span><span class="tag">Game Center</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media"><img src="/assets/img/tTmo.webp" loading="lazy" decoding="async" alt="T-Mobile Tuesdays app screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 08</div>
+              <h3><a href="https://www.t-mobiletuesdays.com/" target="_blank" rel="noopener">T-Mobile Tuesdays<span class="ext">↗</span></a></h3>
+              <p>Highly acclaimed US app offering vouchers and discounts to users — reached the Top 50 in the App Store several times.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Consumer</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>UrbanForms</h3>
-            <p>Companion app for the yearly urban art festival in Lodz, Poland — navigate every
-            mural painted in the city, get to know the art and stay up to date with the event.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Maps</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media"><img src="/assets/img/tDrive.webp" loading="lazy" decoding="async" alt="TomTom MyDrive route-planning screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 09</div>
+              <h3><a href="https://www.tomtom.com/" target="_blank" rel="noopener">TomTom MyDrive<span class="ext">↗</span></a></h3>
+              <p>TomTom's client for the MyDrive service — plan a route from your device, then read it on your navigation device.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Navigation</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>MigawKarta</h3>
-            <p>Tracking for all public transport in Lodz, including management of the local
-            "Migawka" travel card — expiration alerts, news, timetable changes and payment history.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Transport</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios games">
+            <div class="card-media"><img src="/assets/img/tJumpy.webp" loading="lazy" decoding="async" alt="Jumpy Chewie game screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 10</div>
+              <h3>Jumpy Chewie</h3>
+              <p>Universal game for iOS built with SpriteKit, featuring Game Center connectivity, push notifications and in-app purchases.</p>
+              <div class="tags"><span class="tag">SpriteKit</span><span class="tag">Game Center</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>iULE</h3>
-            <p>App for the University of León integrating dashboards, lists and account screens
-            so students and professors can better manage their lessons.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Education</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media"><img src="/assets/img/tUrban.webp" loading="lazy" decoding="async" alt="UrbanForms mural-map screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 11</div>
+              <h3>UrbanForms</h3>
+              <p>Companion app for the yearly urban-art festival in Łódź, Poland — navigate every mural painted in the city, get to know the art and stay up to date with the event.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Maps</span><span class="tag">Urban Art</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>Deutsche Bank Summit</h3>
-            <p>iPad ad-hoc app helping executives manage their relationships with delegates and
-            attendees at the Summit conference.</p>
-            <div class="tags"><span class="tag">iPad</span><span class="tag">Enterprise</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media"><img src="/assets/img/tMiga.webp" loading="lazy" decoding="async" alt="MigawKarta transport app screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 12</div>
+              <h3>MigawKarta</h3>
+              <p>Tracking for all public transport in Łódź, including management of the local "Migawka" travel card — expiration alerts, news, timetable changes and payment history.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Transport</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>HP ePrint &amp; Share</h3>
-            <p>HP ePrint service for printing documents via tablets, smartphones, laptops and
-            printers, alongside desktop utilities for large-format HP printers.</p>
-            <div class="tags"><span class="tag">WPF</span><span class="tag">C#</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media"><img src="/assets/img/tUle.webp" loading="lazy" decoding="async" alt="iULE university app screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 13</div>
+              <h3>iULE</h3>
+              <p>App for the University of León integrating dashboards, lists and account screens so students and professors can better manage their lessons.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Education</span></div>
+            </div>
+          </article>
 
-          <div class="card">
-            <h3>Blizzability</h3>
-            <p>Framework for apps dynamically driven from a CMS — personalizing module loads and
-            optimizing offline data handling.</p>
-            <div class="tags"><span class="tag">iOS</span><span class="tag">Framework</span></div>
-          </div>
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media"><img src="/assets/img/tDb.webp" loading="lazy" decoding="async" alt="Deutsche Bank Summit iPad app welcome screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 14</div>
+              <h3>Deutsche Bank Summit</h3>
+              <p>iPad ad-hoc app helping executives manage their relationships with delegates and attendees at the Summit conference.</p>
+              <div class="tags"><span class="tag">iPad</span><span class="tag">Enterprise</span></div>
+            </div>
+          </article>
+
+          <article class="card project reveal" data-cat="">
+            <div class="card-media"><img src="/assets/img/tHp.webp" loading="lazy" decoding="async" alt="HP Designjet print-preview utility screen"></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 15</div>
+              <h3>HP ePrint &amp; Share</h3>
+              <p>HP ePrint service for printing documents via tablets, smartphones, laptops and printers, alongside desktop utilities for large-format HP printers.</p>
+              <div class="tags"><span class="tag">WPF</span><span class="tag">C#</span></div>
+            </div>
+          </article>
+
+          <article class="card project reveal" data-cat="ios">
+            <div class="card-media ph ph-oss"><span class="ph-glyph">⬡</span><span class="ph-label">Framework</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 16</div>
+              <h3>Blizzability</h3>
+              <p>Framework for apps dynamically driven from a CMS — personalizing module loads and optimizing offline data handling.</p>
+              <div class="tags"><span class="tag">iOS</span><span class="tag">Framework</span></div>
+            </div>
+          </article>
 
         </div>
       </div>
     </section>
 
-    <section id="skills" class="alt">
+    <!-- ============================ SKILLS / SPEC SHEET ============================ -->
+    <section id="skills">
       <div class="container">
-        <h2 class="section-title">Skills</h2>
+        <div class="sec-head reveal">
+          <div class="sec-tag"><span class="num">04</span><span class="bar"></span> Spec Sheet</div>
+          <h2 class="sec-title">Under the Hood</h2>
+        </div>
 
-        <div class="chip-group">
+        <div class="spec-group reveal">
           <h3>Mobile &amp; Languages</h3>
           <div class="chips">
-            <span class="chip">Swift</span>
-            <span class="chip">SwiftUI</span>
-            <span class="chip">Objective-C</span>
-            <span class="chip">Cocoa Touch</span>
-            <span class="chip">Python</span>
-            <span class="chip">C#</span>
-            <span class="chip">C++</span>
-            <span class="chip">JavaScript</span>
+            <span class="chip">Swift</span><span class="chip">SwiftUI</span><span class="chip">Objective-C</span><span class="chip">Cocoa Touch</span><span class="chip">Python</span><span class="chip">C#</span><span class="chip">C++</span><span class="chip">JavaScript</span>
           </div>
         </div>
 
-        <div class="chip-group">
+        <div class="spec-group reveal">
           <h3>Digital Identity &amp; Security</h3>
           <div class="chips">
-            <span class="chip">ISO/IEC 18013 (mDL / mDoc)</span>
-            <span class="chip">Verifiable Credentials</span>
-            <span class="chip">NFC Document Verification</span>
-            <span class="chip">Biometric Authentication</span>
-            <span class="chip">CBOR</span>
-            <span class="chip">Applied Cryptography</span>
-            <span class="chip">Secure Architecture</span>
+            <span class="chip">ISO/IEC 18013 (mDL / mDoc)</span><span class="chip">Verifiable Credentials</span><span class="chip">NFC Document Verification</span><span class="chip">Biometric Authentication</span><span class="chip">CBOR</span><span class="chip">Applied Cryptography</span><span class="chip">Secure Architecture</span>
           </div>
         </div>
 
-        <div class="chip-group">
-          <h3>Engineering practices</h3>
+        <div class="spec-group reveal">
+          <h3>Engineering Practices</h3>
           <div class="chips">
-            <span class="chip">Software Architecture</span>
-            <span class="chip">Performance &amp; High Availability</span>
-            <span class="chip">Unit Testing</span>
-            <span class="chip">TDD / BDD</span>
-            <span class="chip">Integration Testing</span>
-            <span class="chip">Code Review</span>
-            <span class="chip">Agile / Scrum</span>
-            <span class="chip">Git</span>
+            <span class="chip">Software Architecture</span><span class="chip">Performance &amp; High Availability</span><span class="chip">Unit Testing</span><span class="chip">TDD / BDD</span><span class="chip">Integration Testing</span><span class="chip">Code Review</span><span class="chip">Agile / Scrum</span><span class="chip">Git</span>
           </div>
         </div>
 
-        <div class="chip-group">
+        <div class="spec-group reveal">
           <h3>Games &amp; Design</h3>
           <div class="chips">
-            <span class="chip">Godot 4</span>
-            <span class="chip">SpriteKit</span>
-            <span class="chip">Procedural Graphics</span>
-            <span class="chip">Design Systems</span>
-            <span class="chip">Custom UI Components</span>
-            <span class="chip">User Experience Design</span>
-            <span class="chip">Pixel Art</span>
-            <span class="chip">Photoshop / Illustrator</span>
+            <span class="chip">Godot 4</span><span class="chip">SpriteKit</span><span class="chip">Procedural Graphics</span><span class="chip">Design Systems</span><span class="chip">Custom UI Components</span><span class="chip">UX Design</span><span class="chip">Pixel Art</span><span class="chip">Photoshop / Illustrator</span>
           </div>
         </div>
 
         <div class="cols">
-          <div class="card">
+          <div class="card reveal">
             <h3>Education</h3>
             <p><strong>BEng, Computer Science</strong><br>Universidad de León · 2006 – 2011</p>
             <p><strong>BEng, Computer Science</strong><br>Kaunas University of Technology · 2008 – 2009</p>
           </div>
-          <div class="card">
+          <div class="card reveal">
             <h3>Languages</h3>
             <p>Spanish — Advanced<br>English — Advanced<br>Polish — Intermediate</p>
           </div>
-          <div class="card">
+          <div class="card reveal">
             <h3>Awards</h3>
             <p>Value Based Award<br>Fgulem III Prototypes Contest (2012)</p>
           </div>
@@ -332,19 +471,41 @@
       </div>
     </section>
 
+    <!-- ============================ CONTACT / START LINE ============================ -->
+    <section id="contact" class="startline">
+      <div class="container">
+        <div class="reveal">
+          <div class="sec-tag"><span class="num">05</span><span class="bar"></span> Lights Out</div>
+          <p class="big">Let's build<br>something <a href="mailto:gelemias@gmail.com">fast.</a></p>
+          <p>Have a product to ship, an identity problem to crack, or just want to talk Swift, Godot and running splits? The line's open.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="mailto:gelemias@gmail.com">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-8 5-8-5V6l8 5 8-5v2.24z"/></svg>
+              gelemias@gmail.com
+            </a>
+            <a class="btn" href="https://www.linkedin.com/in/guillermoRD" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn" href="https://github.com/gelemias" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div class="checker" aria-hidden="true"></div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ============================ FOOTER ============================ -->
   <footer class="footer">
     <div class="container">
+      <p>© <span id="year">2026</span> Guillermo Rodriguez Delgado — Made with <span class="love">❤</span> in Łódź</p>
       <nav>
         <a href="/privacy/">Privacy</a>
         <a href="/support/">Support</a>
         <a href="https://github.com/gelemias" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/guillermoRD" target="_blank" rel="noopener">LinkedIn</a>
       </nav>
-      <p>Made with <span class="love">❤</span> by Guillermo RD</p>
     </div>
   </footer>
 
+  <script src="/assets/js/main.js" defer></script>
 </body>
 </html>
