@@ -336,10 +336,13 @@ img { max-width: 100%; display: block; }
   line-height: 0.86;
   letter-spacing: 0.005em;
   margin: 0;
-  font-size: clamp(3.4rem, 15vw, 12rem);
+  font-size: clamp(3rem, 13vw, 10.5rem);
 }
 .hero-name .l1,
-.hero-name .l3 { display: block; color: var(--text); }
+.hero-name .l2,
+.hero-name .l3 { display: block; white-space: nowrap; }
+.hero-name .l1,
+.hero-name .l3 { color: var(--text); }
 .hero-name .l2 {
   display: block;
   color: transparent;
