@@ -1,6 +1,6 @@
 # gelemias.github.io
 
-Personal website of Guillermo Rodriguez Delgado — iOS Software Engineer & Mobile Architect.
+Personal website of Guillermo Rodríguez Delgado — iOS Software Engineer & Mobile Architect.
 
 Plain static HTML/CSS site served by GitHub Pages — no build step, no dependencies
 (`.nojekyll` disables the Jekyll build entirely).
