@@ -625,6 +625,84 @@ section { position: relative; padding: 96px 0; }
 }
 .card.hide { display: none; }
 
+/* project cards with a media header */
+.card.project { padding: 0; }
+.card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+}
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  filter: grayscale(1) contrast(1.02) brightness(0.98);
+  transition: filter 0.45s var(--ease), transform 0.65s var(--ease);
+}
+.card.project:hover .card-media img { filter: none; transform: scale(1.06); }
+.card-media::after {                 /* HUD scanline + corner tick */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(transparent 0 96%, color-mix(in srgb, var(--volt) 55%, transparent) 96% 97%, transparent 97%),
+    linear-gradient(to top, color-mix(in srgb, var(--ink) 55%, transparent), transparent 42%);
+  background-size: 100% 26px, 100% 100%;
+  opacity: 0.5;
+  transition: opacity 0.4s var(--ease);
+}
+.card.project:hover .card-media::after { opacity: 0.85; }
+.card-media .ph-glyph,
+.card-media .ph-label { position: relative; z-index: 1; }
+.card-media.ph {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background:
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--volt) 14%, transparent), transparent 68%),
+    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 40px),
+    var(--surface-2);
+}
+.card-media.ph-id {
+  background:
+    radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--cyan) 16%, transparent), transparent 68%),
+    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 40px),
+    var(--surface-2);
+}
+.ph-glyph {
+  font-family: var(--font-mono);
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--volt);
+  text-shadow: 0 0 24px color-mix(in srgb, var(--volt) 55%, transparent);
+}
+.ph-id .ph-glyph { color: var(--cyan); text-shadow: 0 0 24px color-mix(in srgb, var(--cyan) 55%, transparent); }
+.ph-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 22px 24px;
+}
+.card.project .card-idx { margin-bottom: 12px; }
+
+/* touch / coarse pointers: show full colour, no hover reveal */
+@media (hover: none) {
+  .card-media img { filter: none; }
+}
+
 /* ==========================================================================
    SKILLS — SPEC SHEET
    ========================================================================== */
