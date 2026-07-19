@@ -8,6 +8,38 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* --- theme toggle (light / dark) ----------------------------------------- */
+  var THEME_KEY = "grd-theme";
+  var root = document.documentElement;
+  var themeMedia = window.matchMedia("(prefers-color-scheme: light)");
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+
+  var effectiveTheme = function () {
+    var forced = root.getAttribute("data-theme");
+    if (forced) return forced;
+    return themeMedia.matches ? "light" : "dark";
+  };
+  var syncMeta = function () {
+    if (themeMeta) themeMeta.setAttribute("content", effectiveTheme() === "light" ? "#f0f0ec" : "#08080a");
+  };
+  syncMeta();
+
+  var toggle = document.getElementById("themeToggle");
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var next = effectiveTheme() === "dark" ? "light" : "dark";
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      root.setAttribute("data-theme", next);
+      syncMeta();
+    });
+  }
+  // follow the system when the user hasn't picked a theme
+  themeMedia.addEventListener("change", function () {
+    var stored;
+    try { stored = localStorage.getItem(THEME_KEY); } catch (e) { stored = null; }
+    if (!stored) syncMeta();
+  });
+
   /* --- current year -------------------------------------------------------- */
   var yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());

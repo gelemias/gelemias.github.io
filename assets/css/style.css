@@ -15,10 +15,13 @@
   --muted:    #8d8f9c;
   --muted-2:  #62636e;
 
-  --volt:     #d7ff2e;   /* signature neon — running / urban */
+  --volt:     #d7ff2e;   /* accent (text/lines/glyphs) — darkens in light mode */
+  --volt-fill:#d7ff2e;   /* neon block-fill — stays bright under dark text */
   --volt-dim: #a9c922;
   --signal:   #ff3b2e;   /* racing red — used sparingly */
   --cyan:     #26e0e0;
+  --glow-a:   #d7ff2e;   /* hero ambient glows */
+  --glow-b:   #26e0e0;
 
   --radius:   14px;
   --radius-lg:22px;
@@ -30,6 +33,48 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   color-scheme: dark;
+}
+
+/* --- LIGHT THEME ---------------------------------------------------------
+   "Concrete + volt": light asphalt/paper, ink text, deep-green accent for
+   text & lines, neon retained on key block-fills (button, ticker, filter).
+   Applied on system preference (unless the user forced dark) and via the
+   HUD toggle (data-theme).                                                */
+:root[data-theme="light"] {
+  --ink:      #f0f0ec;
+  --ink-2:    #e7e7e1;
+  --surface:  #ffffff;
+  --surface-2:#f4f4ef;
+  --line:     rgba(12, 14, 20, 0.10);
+  --line-2:   rgba(12, 14, 20, 0.17);
+  --text:     #15150f;
+  --muted:    #55564c;
+  --muted-2:  #77786c;
+  --volt:     #4a6800;   /* readable deep-green accent */
+  --volt-dim: #3c5500;
+  --cyan:     #0b7c8e;
+  --glow-a:   #dfff8a;
+  --glow-b:   #cdeff2;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --ink:      #f0f0ec;
+    --ink-2:    #e7e7e1;
+    --surface:  #ffffff;
+    --surface-2:#f4f4ef;
+    --line:     rgba(12, 14, 20, 0.10);
+    --line-2:   rgba(12, 14, 20, 0.17);
+    --text:     #15150f;
+    --muted:    #55564c;
+    --muted-2:  #77786c;
+    --volt:     #4a6800;
+    --volt-dim: #3c5500;
+    --cyan:     #0b7c8e;
+    --glow-a:   #dfff8a;
+    --glow-b:   #cdeff2;
+    color-scheme: light;
+  }
 }
 
 * { box-sizing: border-box; }
@@ -81,7 +126,7 @@ img { max-width: 100%; display: block; }
   padding: 0 28px;
 }
 
-::selection { background: var(--volt); color: #000; }
+::selection { background: var(--volt-fill); color: #000; }
 
 /* ==========================================================================
    NAV / HUD
@@ -151,6 +196,32 @@ img { max-width: 100%; display: block; }
   color: var(--muted);
 }
 .nav-status .clock { color: var(--text); }
+
+/* theme toggle */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--line-2);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.2s var(--ease);
+}
+.theme-toggle:hover { border-color: var(--volt); color: var(--volt); transform: translateY(-1px); }
+.theme-toggle svg { width: 16px; height: 16px; fill: currentColor; }
+.theme-toggle .i-sun { display: none; }
+.theme-toggle .i-moon { display: block; }
+:root[data-theme="light"] .theme-toggle .i-sun { display: block; }
+:root[data-theme="light"] .theme-toggle .i-moon { display: none; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .theme-toggle .i-sun { display: block; }
+  :root:not([data-theme="dark"]) .theme-toggle .i-moon { display: none; }
+}
 .status-dot {
   display: inline-flex;
   align-items: center;
@@ -203,10 +274,10 @@ img { max-width: 100%; display: block; }
 .btn svg { width: 16px; height: 16px; fill: currentColor; }
 .btn:hover { transform: translateY(-3px); border-color: var(--line-2); }
 .btn-primary {
-  background: var(--volt);
+  background: var(--volt-fill);
   color: #05050a;
-  border-color: var(--volt);
-  box-shadow: 0 8px 30px -10px var(--volt);
+  border-color: var(--volt-fill);
+  box-shadow: 0 8px 30px -10px var(--volt-fill);
 }
 .btn-primary:hover { box-shadow: 0 14px 40px -10px var(--volt); }
 
@@ -227,8 +298,8 @@ img { max-width: 100%; display: block; }
   pointer-events: none;
   z-index: 0;
 }
-.hero-glow.a { background: var(--volt);  top: -220px; right: -120px; }
-.hero-glow.b { background: var(--cyan);  bottom: -260px; left: -160px; opacity: 0.16; }
+.hero-glow.a { background: var(--glow-a);  top: -220px; right: -120px; }
+.hero-glow.b { background: var(--glow-b);  bottom: -260px; left: -160px; opacity: 0.16; }
 
 .hero .container { position: relative; z-index: 2; }
 
@@ -324,7 +395,7 @@ img { max-width: 100%; display: block; }
    ========================================================================== */
 .ticker {
   border-block: 1px solid #000;
-  background: var(--volt);
+  background: var(--volt-fill);
   overflow: hidden;
   white-space: nowrap;
   transform: rotate(-1.4deg) scale(1.04);
@@ -557,7 +628,7 @@ section { position: relative; padding: 96px 0; }
   transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
 }
 .filter:hover { color: var(--text); border-color: var(--line-2); }
-.filter.active { color: #05050a; background: var(--volt); border-color: var(--volt); }
+.filter.active { color: #05050a; background: var(--volt-fill); border-color: var(--volt-fill); }
 
 .grid {
   display: grid;
