@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Other App — Privacy Policy</title>
-  <meta name="description" content="Privacy policy template for upcoming apps.">
+  <title>Turn Siege — Privacy Policy</title>
+  <meta name="description" content="Privacy policy for the Turn Siege game.">
   <script>try{var t=localStorage.getItem("grd-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
@@ -24,41 +24,85 @@
     <div class="container">
       <a class="breadcrumb" href="/privacy/">← All privacy policies</a>
 
-      <!-- TEMPLATE: duplicate this file for each new app.
-           1. Rename the file to your app's name (e.g. myapp.html).
-           2. Replace every occurrence of "Other App" with the app name.
-           3. Review each section against the app's real data practices —
-              they must match the App Privacy answers you give in
-              App Store Connect.
-           4. Add the app to the directories in /privacy/index.html and
-              /support/index.html. -->
+      <h1>Turn Siege — Privacy Policy</h1>
+      <p class="updated">Last updated: July 24, 2026</p>
 
-      <h1>Other App — Privacy Policy</h1>
-      <p class="updated">Last updated: July 17, 2026</p>
+      <p>Turn Siege ("the game", "we") is a single-player mobile game published by
+      Guillermo Rodríguez Delgado. This policy explains what data the game handles.
+      It is written to serve as the privacy-policy URL required by the Apple App
+      Store and Google Play.</p>
 
-      <p>This privacy policy applies to the <strong>Other App</strong> app for iOS,
-      developed by Guillermo Rodríguez Delgado.</p>
+      <p><strong>Note:</strong> this policy describes the game <strong>with ads and
+      analytics enabled</strong> (Google AdMob + Firebase Analytics/Crashlytics).
+      Until those SDKs ship in a released build, the game collects nothing beyond
+      the local save described below. The "Last updated" date and the store
+      data-safety declarations are kept in sync with what a given release actually
+      contains.</p>
 
-      <h2>Data collection</h2>
-      <p>Other App does not collect, store or transmit any personal data. All app
-      data stays on your device (and in your personal iCloud account if you enable
-      device backups or syncing, which are managed entirely by Apple).</p>
+      <h2>Summary</h2>
+      <p>Turn Siege has no user accounts and no login. It stores your progress
+      locally on your device. When ads and analytics are enabled, it uses Google
+      AdMob and Firebase, which collect limited data as described below to serve
+      ads and to keep the game stable.</p>
 
-      <h2>Third-party services</h2>
-      <p>Other App does not use third-party analytics, advertising frameworks or
-      tracking tools of any kind.</p>
+      <h2>Data stored on your device</h2>
+      <p>Your progress is saved locally in a single file (<code>save.json</code>)
+      inside the app's private storage sandbox: scrap balance and lifetime totals,
+      owned weapons and levels, equipped loadout, daily-streak counters and last
+      day played, tutorial flag, and best-round record. This never leaves your
+      device and is removed when you uninstall the game or clear its data.</p>
 
-      <h2>Data sharing</h2>
-      <p>Since no data is collected, no data is shared with third parties.</p>
+      <h2>Data collected by third-party services</h2>
+      <p>When enabled, the game includes these Google SDKs:</p>
+      <ul>
+        <li><strong>Google AdMob (ads).</strong> Serves rewarded and interstitial
+        ads. AdMob may access a device <strong>advertising identifier</strong> and
+        collect ad-interaction and coarse device/diagnostic data to deliver and
+        measure ads and to limit fraud. Governed by Google's policies:
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>
+        and
+        <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">support.google.com/admob/answer/6128543</a>.</li>
+        <li><strong>Firebase Analytics (usage).</strong> Collects pseudonymous
+        app-usage events (e.g. runs played, screens viewed) and an app-instance
+        identifier to help us understand aggregate gameplay. No name, email, or
+        contact data.</li>
+        <li><strong>Firebase Crashlytics (stability).</strong> Collects crash
+        reports — stack traces and device/OS state at the time of a crash — so we
+        can fix problems. No personal profile data.</li>
+      </ul>
+      <p>We do <strong>not</strong> collect your name, email, phone number, precise
+      location, photos, contacts, or payment information. The game has no in-app
+      purchases.</p>
+
+      <h2>Consent and your choices</h2>
+      <ul>
+        <li>On first run (where required by law), the game shows a
+        <strong>consent form</strong> (Google UMP) covering ad data use. On iOS it
+        also shows Apple's <strong>App Tracking Transparency</strong> prompt;
+        declining means non-personalized ads.</li>
+        <li>You can reset your advertising identifier or limit ad tracking in your
+        device settings at any time.</li>
+      </ul>
 
       <h2>Children's privacy</h2>
-      <p>Other App does not collect data from anyone, including children under
-      the age of 13.</p>
+      <p>The game is suitable for general audiences and is not directed to children
+      under the age where consent is required. Where an all-ages audience is
+      declared, ad serving is configured accordingly (e.g. non-personalized). We do
+      not knowingly collect personal data from children.</p>
+
+      <h2>Data sharing and retention</h2>
+      <p>Data collected by AdMob and Firebase is processed by Google as described
+      in its policies. We do not sell your data. Analytics and crash data are
+      retained per Google's default retention settings; local save data persists on
+      your device until you remove it.</p>
+
+      <h2>Third-party components</h2>
+      <p>The game is built with the Godot Engine and bundles open-source fonts.
+      Data handling by the SDKs above is described in this policy.</p>
 
       <h2>Changes to this policy</h2>
-      <p>If the app's data practices ever change, this policy will be updated
-      here before the change takes effect, and the "Last updated" date above
-      will be revised.</p>
+      <p>Updates are published at the same location with a revised "Last updated"
+      date.</p>
 
       <h2>Contact</h2>
       <p>If you have any questions about this privacy policy, contact me at
