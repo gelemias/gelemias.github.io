@@ -12,11 +12,11 @@ Plain static HTML/CSS site served by GitHub Pages — no build step, no dependen
 ├── privacy/
 │   ├── index.html              # General privacy policy and app directory
 │   ├── sumo.html               # Per-app privacy policy
-│   └── other-app.html          # Template — duplicate for each new app
+│   └── turn-siege.html         # Per-app privacy policy
 ├── support/
 │   ├── index.html              # Contact details and app directory
 │   ├── sumo.html               # Per-app support page
-│   └── other-app.html          # Template — duplicate for each new app
+│   └── turn-siege.html         # Per-app support page
 ├── assets/                     # Stylesheet and images
 ├── apple-app-site-association  # Universal links configuration
 └── binding/                    # Mobile ID binding landing page
@@ -24,9 +24,10 @@ Plain static HTML/CSS site served by GitHub Pages — no build step, no dependen
 
 ## Adding a new app (App Store submission)
 
-1. Duplicate `privacy/other-app.html` and `support/other-app.html`, renaming them
-   after the app (e.g. `privacy/myapp.html`).
-2. Follow the TEMPLATE comment at the top of each file.
+1. Duplicate an existing app's pages (e.g. `privacy/sumo.html` and
+   `support/sumo.html`), renaming them after the app (e.g. `privacy/myapp.html`).
+2. Replace every occurrence of the old app name and review each section against
+   the app's real data practices.
 3. Add the app to the directories in `privacy/index.html` and `support/index.html`.
 4. In App Store Connect, use the page URLs as the app's Privacy Policy URL and
    Support URL.
