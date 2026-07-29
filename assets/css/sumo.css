@@ -245,6 +245,31 @@ body.sumo .su-card p { color: #4d4a72; margin-bottom: 0; }
 body.sumo .su-card p + p { margin-top: 14px; }
 body.sumo .su-card strong { color: var(--su-navy); }
 
+/* bullet lists inside a sticker card — pink pixel dots instead of UA discs */
+body.sumo .su-card ul {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+body.sumo .su-card ul + p { margin-top: 14px; }
+body.sumo .su-card li {
+  position: relative;
+  padding-left: 26px;
+  color: #4d4a72;
+}
+body.sumo .su-card li + li { margin-top: 9px; }
+body.sumo .su-card li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.62em;
+  width: 9px;
+  height: 9px;
+  background: var(--su-pink);
+  border: 2px solid var(--su-navy);
+  border-radius: 3px;
+}
+
 /* headings: numbered pastel chips, colour-cycled like the logotype */
 body.sumo .su-card h2 {
   display: flex;
