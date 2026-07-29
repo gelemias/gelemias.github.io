@@ -1,0 +1,356 @@
+/* ==========================================================================
+   SUMO — sticker-book skin for the doc pages
+   Layered on top of style.css and activated with <body class="sumo">.
+   Palette + motifs from the app's key art: periwinkle sky, sparkles, cream
+   sticker cards, and the sprout mascot. The wordmark is the supplied logo
+   art; everything else is CSS/SVG.
+   ========================================================================== */
+
+body.sumo {
+  /* --- app palette ------------------------------------------------------- */
+  --su-navy:   #2b2a4c;   /* pixel outline + body copy */
+  --su-navy-2: #4a4775;
+  --su-pink:   #f4a6c8;
+  --su-pink-d: #d4699b;   /* pink dark enough for link text on cream */
+  --su-yellow: #ffd76a;
+  --su-blue:   #8cc7f0;
+  --su-green:  #a9dfa1;
+  --su-lilac:  #b9a8f2;
+  --su-cream:  #fffaf2;
+  --su-sky-a:  #8f92ee;
+  --su-sky-b:  #b7a8f3;
+
+  /* --- remap the site tokens so shared components inherit the theme ------ */
+  --ink:       var(--su-sky-a);
+  --ink-2:     var(--su-sky-b);
+  --surface:   var(--su-cream);
+  --surface-2: #fff3e6;
+  --line:      rgba(43, 42, 76, 0.14);
+  --line-2:    rgba(43, 42, 76, 0.26);
+  --text:      var(--su-navy);
+  --muted:     #56537d;
+  --muted-2:   #7d7aa6;
+  --volt:      var(--su-pink);
+  --volt-fill: var(--su-yellow);
+  --volt-dim:  var(--su-lilac);
+  --accent:    var(--su-pink-d);
+  --ink-on-volt: var(--su-navy);
+  --cyan:      #2f7fa0;
+  --signal:    var(--su-pink-d);
+
+  --su-pixel: "Press Start 2P", "Courier New", monospace;
+
+  color-scheme: light;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%, #a6a3f5 0%, transparent 60%),
+    linear-gradient(180deg, var(--su-sky-a) 0%, var(--su-sky-b) 55%, #c9b8f5 100%)
+    fixed;
+}
+
+/* ==========================================================================
+   BACKGROUND LAYERS — starfield, soft bokeh, sparkle dust
+   ========================================================================== */
+body.sumo::before {                          /* twinkling star grid */
+  background-image:
+    radial-gradient(circle 1.5px at 12px 18px, rgba(255, 255, 255, 0.85) 100%, transparent 0),
+    radial-gradient(circle 1px   at 68px 52px, rgba(255, 255, 255, 0.6)  100%, transparent 0),
+    radial-gradient(circle 1px   at 34px 96px, rgba(255, 255, 255, 0.5)  100%, transparent 0);
+  background-size: 120px 120px, 160px 160px, 200px 200px;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 92%);
+  opacity: 0.9;
+}
+body.sumo::after { opacity: 0.02; }          /* barely-there grain */
+
+.su-fx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.su-fx .bokeh {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  opacity: 0.5;
+}
+.su-fx .bokeh.a { top: -8vh;  left: -6vw;  width: 46vw; height: 46vw; background: #b8b3ff; }
+.su-fx .bokeh.b { top: 34vh;  right: -12vw; width: 42vw; height: 42vw; background: #f7c6dd; opacity: 0.35; }
+.su-fx .bokeh.c { bottom: -18vh; left: 22vw; width: 50vw; height: 50vw; background: #c9f0d5; opacity: 0.28; }
+
+/* four-point pixel sparkles drifting up */
+.su-sparkles { position: absolute; inset: 0; }
+.su-sparkles i {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #fff6c9;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  opacity: 0;
+  animation: su-twinkle 9s ease-in-out infinite;
+}
+@keyframes su-twinkle {
+  0%, 100% { opacity: 0;    transform: translateY(6px) scale(0.6) rotate(0deg); }
+  50%      { opacity: 0.95; transform: translateY(-10px) scale(1) rotate(20deg); }
+}
+.su-sparkles i:nth-child(1) { left:  8%; top: 14%; animation-delay: 0s;   background: #fff6c9; }
+.su-sparkles i:nth-child(2) { left: 21%; top: 42%; animation-delay: 2.6s; background: #ffd7ea; }
+.su-sparkles i:nth-child(3) { left: 34%; top: 8%;  animation-delay: 4.1s; background: #d8f5ff; }
+.su-sparkles i:nth-child(4) { left: 62%; top: 26%; animation-delay: 1.4s; background: #fff6c9; }
+.su-sparkles i:nth-child(5) { left: 76%; top: 58%; animation-delay: 5.2s; background: #ffd7ea; }
+.su-sparkles i:nth-child(6) { left: 88%; top: 18%; animation-delay: 3.3s; background: #e2ffd9; }
+.su-sparkles i:nth-child(7) { left: 47%; top: 72%; animation-delay: 6.4s; background: #d8f5ff; }
+.su-sparkles i:nth-child(8) { left: 14%; top: 78%; animation-delay: 7.6s; background: #fff6c9; }
+
+/* ==========================================================================
+   NAV — frosted candy bar
+   ========================================================================== */
+body.sumo .nav {
+  background: rgba(255, 250, 242, 0.72);
+  border-bottom: 3px solid var(--su-navy);
+  box-shadow: 0 6px 0 -2px rgba(43, 42, 76, 0.12);
+}
+body.sumo .nav-brand {
+  font-family: var(--su-pixel);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--su-navy);
+}
+body.sumo .nav-brand:hover { color: var(--su-pink-d); }
+body.sumo .nav-links a {
+  font-family: var(--su-pixel);
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--su-navy-2);
+}
+body.sumo .nav-links a:hover { color: var(--su-pink-d); }
+
+/* ==========================================================================
+   HERO — logotype, mascot, subtitle
+   ========================================================================== */
+.su-hero {
+  position: relative;
+  margin: 4px 0 44px;
+  padding: clamp(20px, 5vw, 44px) 0 0;
+  text-align: center;
+}
+
+/* --- the sticker logotype (key art) ------------------------------------ */
+body.sumo .doc h1.su-logo {
+  position: relative;
+  display: block;
+  margin: 0;
+  font-size: 0;                            /* the <img> carries the wordmark */
+  line-height: 0;
+}
+.su-logo-img {
+  width: min(460px, 78%);
+  height: auto;
+  margin: 0 auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 12px rgba(43, 42, 76, 0.35));
+}
+
+/* --- mascot ------------------------------------------------------------- */
+.su-mascot-wrap {
+  display: block;
+  margin: 18px auto 0;
+  width: clamp(96px, 22vw, 148px);
+  animation: su-bob 3.6s ease-in-out infinite;
+  filter: drop-shadow(0 8px 10px rgba(43, 42, 76, 0.22));
+}
+.sumo-mascot { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+@keyframes su-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* --- subtitle pill + updated chip -------------------------------------- */
+.su-pill {
+  display: block;
+  width: fit-content;
+  margin: 20px auto 0;
+  padding: 12px 22px;
+  font-family: var(--su-pixel);
+  font-size: clamp(0.52rem, 2vw, 0.76rem);
+  line-height: 1.7;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--su-navy);
+  background: var(--su-cream);
+  border: 3px solid var(--su-navy);
+  border-radius: 999px;
+  box-shadow: 0 5px 0 var(--su-navy);
+}
+.su-chip {
+  display: inline-block;
+  margin: 18px 0 0;
+  padding: 8px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--su-navy);
+  background: rgba(255, 250, 242, 0.8);
+  border: 2px solid rgba(43, 42, 76, 0.5);
+  border-radius: 999px;
+}
+.su-chip b { color: var(--su-pink-d); }
+
+/* ==========================================================================
+   DOC BODY — sticker cards
+   ========================================================================== */
+body.sumo .doc { padding-top: 36px; }
+body.sumo .breadcrumb {
+  display: inline-block;
+  padding: 7px 14px;
+  font-family: var(--su-pixel);
+  font-size: 0.54rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--su-navy);
+  background: rgba(255, 250, 242, 0.8);
+  border: 2px solid var(--su-navy);
+  border-radius: 999px;
+  box-shadow: 0 3px 0 var(--su-navy);
+}
+body.sumo .doc a.breadcrumb { color: var(--su-navy); border-bottom: 2px solid var(--su-navy); border-radius: 999px; }
+body.sumo .doc a.breadcrumb:hover { background: var(--su-yellow); color: var(--su-navy); }
+
+.su-intro {
+  max-width: 68ch;
+  margin: 0 auto;
+  text-align: center;
+  color: #ffffff;
+  font-size: 1.06rem;
+  font-weight: 500;
+  text-shadow: 0 1px 6px rgba(43, 42, 76, 0.45);
+}
+body.sumo .su-intro strong { color: #ffffff; }
+
+.su-card {
+  position: relative;
+  max-width: 68ch;
+  margin: 26px auto 0;
+  padding: 26px 28px 24px;
+  background: var(--su-cream);
+  border: 3px solid var(--su-navy);
+  border-radius: 22px;
+  box-shadow: 0 7px 0 var(--su-navy), 0 18px 30px -18px rgba(43, 42, 76, 0.6);
+}
+body.sumo .su-card p { color: #4d4a72; margin-bottom: 0; }
+body.sumo .su-card p + p { margin-top: 14px; }
+body.sumo .su-card strong { color: var(--su-navy); }
+
+/* headings: numbered pastel chips, colour-cycled like the logotype */
+body.sumo .su-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 14px;
+  font-family: var(--su-pixel);
+  font-size: clamp(0.6rem, 2.3vw, 0.8rem);
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--su-navy);
+}
+body.sumo .doc .container { counter-reset: su-sec; }
+body.sumo .su-card h2::before {
+  counter-increment: su-sec;
+  content: counter(su-sec, decimal-leading-zero);
+  flex: none;
+  padding: 6px 8px;
+  font-size: 0.74em;
+  color: var(--su-navy);
+  background: var(--su-pink);
+  border: 2px solid var(--su-navy);
+  border-radius: 9px;
+  box-shadow: 0 3px 0 var(--su-navy);
+}
+body.sumo .su-card:nth-of-type(4n + 2) h2::before { background: var(--su-yellow); }
+body.sumo .su-card:nth-of-type(4n + 3) h2::before { background: var(--su-blue); }
+body.sumo .su-card:nth-of-type(4n + 4) h2::before { background: var(--su-green); }
+
+/* links */
+body.sumo .doc a {
+  color: var(--su-pink-d);
+  font-weight: 600;
+  border-bottom: 3px solid var(--su-pink);
+  border-radius: 2px;
+  word-break: break-word;
+}
+body.sumo .doc a:hover { background: var(--su-yellow); color: var(--su-navy); border-bottom-color: var(--su-navy); }
+
+/* action buttons */
+.su-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.su-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 18px;
+  font-family: var(--su-pixel);
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--su-navy);
+  background: var(--su-cream);
+  border: 3px solid var(--su-navy);
+  border-radius: 14px;
+  box-shadow: 0 5px 0 var(--su-navy);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+}
+body.sumo .doc a.su-btn { color: var(--su-navy); border-bottom: 3px solid var(--su-navy); border-radius: 14px; }
+body.sumo .doc a.su-btn:hover {
+  background: var(--su-yellow);
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--su-navy);
+}
+.su-btn.primary { background: var(--su-pink); }
+body.sumo .doc a.su-btn.primary:hover { background: var(--su-yellow); }
+
+/* ==========================================================================
+   FOOTER — candy stripe
+   ========================================================================== */
+body.sumo .footer {
+  position: relative;
+  margin-top: 60px;
+  padding-top: 54px;
+  border-top: 0;
+  color: var(--su-navy);
+}
+body.sumo .footer::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 10px;
+  background: repeating-linear-gradient(90deg,
+    var(--su-pink) 0 26px, var(--su-yellow) 26px 52px,
+    var(--su-blue) 52px 78px, var(--su-green) 78px 104px);
+  border-block: 3px solid var(--su-navy);
+}
+body.sumo .footer a,
+body.sumo .footer p {
+  font-family: var(--su-pixel);
+  font-size: 0.54rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 2;
+  color: var(--su-navy);
+}
+body.sumo .footer a:hover { color: var(--su-pink-d); }
+
+/* ==========================================================================
+   RESPONSIVE / MOTION
+   ========================================================================== */
+@media (max-width: 620px) {
+  .su-card { padding: 22px 20px 20px; border-radius: 18px; }
+  body.sumo .doc h1.su-logo { letter-spacing: 0.02em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .su-sparkles { display: none; }
+  .su-mascot-wrap { animation: none; }
+}
