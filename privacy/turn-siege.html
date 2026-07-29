@@ -5,10 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Turn Siege — Privacy Policy</title>
   <meta name="description" content="Privacy policy for the Turn Siege game.">
-  <script>try{var t=localStorage.getItem("grd-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+  <meta name="theme-color" content="#0a0908">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/turn-siege.css">
 </head>
-<body>
+<body class="ts">
+
+  <!-- atmosphere: ember horizon, smoke, embers, scanlines -->
+  <div class="ts-fx" aria-hidden="true">
+    <span class="glow"></span>
+    <span class="smoke a"></span>
+    <span class="smoke b"></span>
+    <div class="ts-embers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="scan"></div>
+  </div>
 
   <header class="nav">
     <div class="container nav-inner">
@@ -24,102 +37,139 @@
     <div class="container">
       <a class="breadcrumb" href="/privacy/">← All privacy policies</a>
 
-      <h1>Turn Siege — Privacy Policy</h1>
-      <p class="updated">Last updated: July 28, 2026</p>
+      <div class="ts-hero">
+        <span class="beam l" aria-hidden="true"></span>
+        <span class="beam r" aria-hidden="true"></span>
 
-      <p>Turn Siege ("the game", "we") is a single-player mobile game published by
-      Guillermo Rodríguez Delgado. This policy explains what data the game handles.
-      It is written to serve as the privacy-policy URL required by the Apple App
-      Store and Google Play.</p>
+        <h1 class="ts-logo">
+          <span class="ts-word ts-turn"  data-word="Turn">Turn</span>
+          <span class="ts-word ts-siege" data-word="Siege">Siege</span>
+          <span class="ts-drips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="ts-plate">Privacy Policy</span>
+        </h1>
 
-      <p><strong>Note:</strong> this policy describes the game <strong>with ads and
-      analytics enabled</strong> (Google AdMob + Firebase Analytics/Crashlytics),
-      which is what a store build now ships. The "Last updated" date and the store
-      data-safety declarations are kept in sync with what a given release actually
-      contains.</p>
+        <p class="updated ts-chip">Last updated: <b>July 28, 2026</b></p>
 
-      <h2>Summary</h2>
-      <p>Turn Siege has no user accounts and no login. It stores your progress
-      locally on your device. When ads and analytics are enabled, it uses Google
-      AdMob and Firebase, which collect limited data as described below to serve
-      ads and to keep the game stable.</p>
+        <div class="ts-horde" aria-hidden="true"></div>
+      </div>
 
-      <h2>Data stored on your device</h2>
-      <p>Your progress is saved locally in a single file (<code>save.json</code>)
-      inside the app's private storage sandbox: scrap balance and lifetime totals,
-      owned weapons and levels, equipped loadout, daily-streak counters and last
-      day played, tutorial flag, and best-round record. This never leaves your
-      device and is removed when you uninstall the game or clear its data.</p>
+      <div class="ts-intro">
+        <p>Turn Siege ("the game", "we") is a single-player mobile game published by
+        Guillermo Rodríguez Delgado. This policy explains what data the game handles.
+        It is written to serve as the privacy-policy URL required by the Apple App
+        Store and Google Play.</p>
 
-      <h2>Data collected by third-party services</h2>
-      <p>When enabled, the game includes these Google SDKs:</p>
-      <ul>
-        <li><strong>Google AdMob (ads).</strong> Serves rewarded and interstitial
-        ads. AdMob may collect a device identifier, advertising data, product
-        interactions, approximate location (for example, inferred from an IP
-        address), crash data, performance data, and other diagnostic data to
-        deliver and measure ads, perform analytics, and limit fraud. Device
-        identifiers may be used for tracking where the required consent and iOS
-        permission have been granted. Some advertising, interaction,
-        approximate-location, and device-identifier data may be linked to the same
-        device or advertising identifier. This does not give Turn Siege your name
-        or contact details. Governed by Google's policies:
-        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>
-        and
-        <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">support.google.com/admob/answer/6128543</a>.</li>
-        <li><strong>Firebase Analytics (usage).</strong> Collects pseudonymous
-        app-usage events (e.g. runs played, screens viewed) and an app-instance
-        identifier to help us understand aggregate gameplay. No name, email, or
-        contact data.</li>
-        <li><strong>Firebase Crashlytics (stability).</strong> Collects crash
-        reports — stack traces and device/OS state at the time of a crash — so we
-        can fix problems. No personal profile data.</li>
-      </ul>
-      <p>We do <strong>not</strong> collect your name, email, phone number, precise
-      location, photos, contacts, or payment information. The game has no user
-      account or in-app purchases. Third-party SDK data can be associated with a
-      device or advertising identifier even though it is not associated with a
-      Turn Siege account.</p>
+        <p class="ts-note"><strong>Note:</strong> this policy describes the game <strong>with ads and
+        analytics enabled</strong> (Google AdMob + Firebase Analytics/Crashlytics),
+        which is what a store build now ships. The "Last updated" date and the store
+        data-safety declarations are kept in sync with what a given release actually
+        contains.</p>
+      </div>
 
-      <h2>Consent and your choices</h2>
-      <ul>
-        <li>On first run (where required by law), the game shows a
-        <strong>consent form</strong> (Google UMP) covering ad data use. On iOS it
-        may also show Apple's <strong>App Tracking Transparency</strong> prompt.
-        Your choices determine whether tracking and personalised advertising are
-        permitted; ads may still be non-personalized when they are not.</li>
-        <li>Where that consent form applies, you can change your answer at any time
-        from <strong>Settings → AD PRIVACY</strong> inside the game.</li>
-        <li>The game does not request ads or enable Firebase Analytics/Crashlytics
-        until consent status is resolved. Google UMP may process limited technical
-        data needed to determine and present the consent choices.</li>
-        <li>You can limit tracking in your device privacy settings at any time.</li>
-      </ul>
+      <section class="ts-panel">
+        <h2>Summary</h2>
+        <p>Turn Siege has no user accounts and no login. It stores your progress
+        locally on your device. When ads and analytics are enabled, it uses Google
+        AdMob and Firebase, which collect limited data as described below to serve
+        ads and to keep the game stable.</p>
+      </section>
 
-      <h2>Children's privacy</h2>
-      <p>The game is suitable for general audiences and is not directed to children
-      under the age where consent is required. Where an all-ages audience is
-      declared, ad serving is configured accordingly (e.g. non-personalized). We do
-      not knowingly collect personal data from children.</p>
+      <section class="ts-panel">
+        <h2>Data stored on your device</h2>
+        <p>Your progress is saved locally in a single file (<code>save.json</code>)
+        inside the app's private storage sandbox: scrap balance and lifetime totals,
+        owned weapons and levels, equipped loadout, daily-streak counters and last
+        day played, tutorial flag, and best-round record. This never leaves your
+        device and is removed when you uninstall the game or clear its data.</p>
+      </section>
 
-      <h2>Data sharing and retention</h2>
-      <p>Data collected by AdMob and Firebase is processed by Google as described
-      in its policies. We do not sell your data. Analytics and crash data are
-      retained per Google's default retention settings; local save data persists on
-      your device until you remove it.</p>
+      <section class="ts-panel">
+        <h2>Data collected by third-party services</h2>
+        <p>When enabled, the game includes these Google SDKs:</p>
+        <ul>
+          <li><strong>Google AdMob (ads).</strong> Serves rewarded and interstitial
+          ads. AdMob may collect a device identifier, advertising data, product
+          interactions, approximate location (for example, inferred from an IP
+          address), crash data, performance data, and other diagnostic data to
+          deliver and measure ads, perform analytics, and limit fraud. Device
+          identifiers may be used for tracking where the required consent and iOS
+          permission have been granted. Some advertising, interaction,
+          approximate-location, and device-identifier data may be linked to the same
+          device or advertising identifier. This does not give Turn Siege your name
+          or contact details. Governed by Google's policies:
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>
+          and
+          <a href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener">support.google.com/admob/answer/6128543</a>.</li>
+          <li><strong>Firebase Analytics (usage).</strong> Collects pseudonymous
+          app-usage events (e.g. runs played, screens viewed) and an app-instance
+          identifier to help us understand aggregate gameplay. No name, email, or
+          contact data.</li>
+          <li><strong>Firebase Crashlytics (stability).</strong> Collects crash
+          reports — stack traces and device/OS state at the time of a crash — so we
+          can fix problems. No personal profile data.</li>
+        </ul>
+        <p>We do <strong>not</strong> collect your name, email, phone number, precise
+        location, photos, contacts, or payment information. The game has no user
+        account or in-app purchases. Third-party SDK data can be associated with a
+        device or advertising identifier even though it is not associated with a
+        Turn Siege account.</p>
+      </section>
 
-      <h2>Third-party components</h2>
-      <p>The game is built with the Godot Engine and bundles open-source fonts.
-      Data handling by the SDKs above is described in this policy.</p>
+      <section class="ts-panel">
+        <h2>Consent and your choices</h2>
+        <ul>
+          <li>On first run (where required by law), the game shows a
+          <strong>consent form</strong> (Google UMP) covering ad data use. On iOS it
+          may also show Apple's <strong>App Tracking Transparency</strong> prompt.
+          Your choices determine whether tracking and personalised advertising are
+          permitted; ads may still be non-personalized when they are not.</li>
+          <li>Where that consent form applies, you can change your answer at any time
+          from <strong>Settings → AD PRIVACY</strong> inside the game.</li>
+          <li>The game does not request ads or enable Firebase Analytics/Crashlytics
+          until consent status is resolved. Google UMP may process limited technical
+          data needed to determine and present the consent choices.</li>
+          <li>You can limit tracking in your device privacy settings at any time.</li>
+        </ul>
+      </section>
 
-      <h2>Changes to this policy</h2>
-      <p>Updates are published at the same location with a revised "Last updated"
-      date.</p>
+      <section class="ts-panel">
+        <h2>Children's privacy</h2>
+        <p>The game is suitable for general audiences and is not directed to children
+        under the age where consent is required. Where an all-ages audience is
+        declared, ad serving is configured accordingly (e.g. non-personalized). We do
+        not knowingly collect personal data from children.</p>
+      </section>
 
-      <h2>Contact</h2>
-      <p>If you have any questions about this privacy policy, contact me at
-      <a href="mailto:gelemias@gmail.com">gelemias@gmail.com</a> or visit the
-      <a href="/support/turn-siege.html">support page</a>.</p>
+      <section class="ts-panel">
+        <h2>Data sharing and retention</h2>
+        <p>Data collected by AdMob and Firebase is processed by Google as described
+        in its policies. We do not sell your data. Analytics and crash data are
+        retained per Google's default retention settings; local save data persists on
+        your device until you remove it.</p>
+      </section>
+
+      <section class="ts-panel">
+        <h2>Third-party components</h2>
+        <p>The game is built with the Godot Engine and bundles open-source fonts.
+        Data handling by the SDKs above is described in this policy.</p>
+      </section>
+
+      <section class="ts-panel">
+        <h2>Changes to this policy</h2>
+        <p>Updates are published at the same location with a revised "Last updated"
+        date.</p>
+      </section>
+
+      <section class="ts-panel">
+        <h2>Contact</h2>
+        <p>If you have any questions about this privacy policy, contact me at
+        <a href="mailto:gelemias@gmail.com">gelemias@gmail.com</a> or visit the
+        <a href="/support/turn-siege.html">support page</a>.</p>
+        <div class="ts-actions">
+          <a class="ts-btn primary" href="mailto:gelemias@gmail.com?subject=Turn%20Siege%20Privacy">Email support</a>
+          <a class="ts-btn" href="/support/turn-siege.html">Support page</a>
+        </div>
+      </section>
     </div>
   </main>
 

@@ -1,0 +1,586 @@
+/* ==========================================================================
+   TURN SIEGE — game skin for the doc pages
+   Layered on top of style.css and activated with <body class="ts">.
+   Palette + motifs taken from the game's key art: cracked stone logotype,
+   ember orange over bone, rooftop spotlights, a horde in the dark, and
+   riveted scrap-metal panels. Everything here is CSS — no image assets.
+   ========================================================================== */
+
+/* Press Start 2P — SIL Open Font License 1.1, self-hosted (latin subset).
+   Licence text: /assets/fonts/OFL-press-start-2p.txt */
+@font-face {
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/press-start-2p-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+                 U+2215, U+FEFF, U+FFFD;
+}
+
+body.ts {
+  /* --- game palette ------------------------------------------------------ */
+  --ts-ember:     #ef5a1f;   /* SIEGE orange / primary accent */
+  --ts-ember-hot: #ff8f36;   /* lit edge, muzzle flash */
+  --ts-lava:      #b8380f;   /* deep cracks */
+  --ts-bone:      #ead9bd;   /* TURN stone */
+  --ts-bone-hi:   #f8eeda;
+  --ts-blood:     #7e1a10;
+  --ts-toxic:     #8fae4b;   /* walker green */
+  --ts-volt:      #4fb0ff;   /* tesla-gun blue */
+  --ts-steel:     #2a2620;
+  --ts-rivet:     #453d33;
+
+  /* --- remap the site tokens so shared components inherit the theme ------ */
+  --ink:       #0a0908;
+  --ink-2:     #100d0b;
+  --surface:   #171310;
+  --surface-2: #1e1814;
+  --line:      rgba(234, 217, 189, 0.10);
+  --line-2:    rgba(234, 217, 189, 0.20);
+  --text:      var(--ts-bone-hi);
+  --muted:     #b3a48d;
+  --muted-2:   #7d7161;
+  --volt:      var(--ts-ember);
+  --volt-fill: var(--ts-ember);
+  --volt-dim:  var(--ts-lava);
+  --accent:    var(--ts-ember-hot);
+  --ink-on-volt: #180a03;
+  --cyan:      var(--ts-toxic);
+  --signal:    var(--ts-blood);
+
+  --ts-pixel: "Press Start 2P", "Courier New", monospace;
+
+  color-scheme: dark;                       /* the siege is always at night */
+  background: var(--ink);
+  color: var(--text);
+}
+
+/* ==========================================================================
+   BACKGROUND LAYERS — isometric ground, ember horizon, smoke, grain
+   ========================================================================== */
+body.ts::before {                            /* isometric tile grid */
+  background-image:
+    repeating-linear-gradient(26.57deg,  var(--line) 0 1px, transparent 1px 58px),
+    repeating-linear-gradient(-26.57deg, var(--line) 0 1px, transparent 1px 58px);
+  background-size: auto;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%, #000 100%);
+  opacity: 0.55;
+}
+body.ts::after { opacity: 0.06; }            /* heavier film grain */
+
+/* fixed atmosphere: ember horizon + drifting smoke + CRT scanlines */
+.ts-fx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ts-fx .glow {
+  position: absolute;
+  left: 50%;
+  bottom: -38vh;
+  width: 140vw;
+  height: 78vh;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 100%,
+              rgba(239, 90, 31, 0.42) 0%,
+              rgba(184, 56, 15, 0.18) 38%,
+              transparent 70%);
+  filter: blur(10px);
+}
+.ts-fx .smoke {
+  position: absolute;
+  width: 70vw;
+  height: 70vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.22;
+}
+.ts-fx .smoke.a {
+  top: -18vw; left: -14vw;
+  background: radial-gradient(circle, rgba(120, 60, 25, 0.75), transparent 68%);
+  animation: ts-drift 34s ease-in-out infinite alternate;
+}
+.ts-fx .smoke.b {
+  top: 22vh; right: -22vw;
+  background: radial-gradient(circle, rgba(40, 55, 80, 0.7), transparent 68%);
+  animation: ts-drift 46s ease-in-out infinite alternate-reverse;
+}
+@keyframes ts-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(6vw, -4vh, 0) scale(1.16); }
+}
+.ts-fx .scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.30) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+/* rising embers */
+.ts-embers { position: absolute; inset: 0; }
+.ts-embers i {
+  position: absolute;
+  bottom: -20px;
+  width: 3px;
+  height: 3px;
+  background: var(--ts-ember-hot);
+  box-shadow: 0 0 8px 1px rgba(255, 143, 54, 0.75);
+  opacity: 0;
+  animation: ts-rise 11s linear infinite;
+}
+@keyframes ts-rise {
+  0%   { transform: translateY(0) translateX(0);     opacity: 0; }
+  12%  { opacity: 0.9; }
+  80%  { opacity: 0.55; }
+  100% { transform: translateY(-96vh) translateX(26px); opacity: 0; }
+}
+.ts-embers i:nth-child(1)  { left:  4%; animation-delay:  0s;   animation-duration: 12s; }
+.ts-embers i:nth-child(2)  { left: 12%; animation-delay:  2.4s; animation-duration:  9s; }
+.ts-embers i:nth-child(3)  { left: 21%; animation-delay:  5.1s; animation-duration: 14s; }
+.ts-embers i:nth-child(4)  { left: 29%; animation-delay:  1.2s; animation-duration: 10s; }
+.ts-embers i:nth-child(5)  { left: 38%; animation-delay:  7.3s; animation-duration: 13s; }
+.ts-embers i:nth-child(6)  { left: 46%; animation-delay:  3.6s; animation-duration:  8s; }
+.ts-embers i:nth-child(7)  { left: 55%; animation-delay:  6.0s; animation-duration: 15s; }
+.ts-embers i:nth-child(8)  { left: 63%; animation-delay:  0.8s; animation-duration: 11s; }
+.ts-embers i:nth-child(9)  { left: 71%; animation-delay:  4.4s; animation-duration:  9.5s; }
+.ts-embers i:nth-child(10) { left: 80%; animation-delay:  8.2s; animation-duration: 12.5s; }
+.ts-embers i:nth-child(11) { left: 88%; animation-delay:  2.0s; animation-duration: 10.5s; }
+.ts-embers i:nth-child(12) { left: 95%; animation-delay:  5.7s; animation-duration: 13.5s; }
+
+/* ==========================================================================
+   NAV — scrap-metal bar
+   ========================================================================== */
+body.ts .nav {
+  background: linear-gradient(180deg, rgba(20, 16, 13, 0.94), rgba(10, 9, 8, 0.88));
+  border-bottom: 2px solid #000;
+  box-shadow: 0 1px 0 rgba(234, 217, 189, 0.08) inset,
+              0 10px 30px -18px rgba(239, 90, 31, 0.9);
+}
+body.ts .nav-brand {
+  font-family: var(--ts-pixel);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--ts-bone);
+  text-shadow: 2px 2px 0 #000;
+}
+body.ts .nav-brand:hover { color: var(--ts-ember-hot); }
+body.ts .nav-links a {
+  font-family: var(--ts-pixel);
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-shadow: 1px 1px 0 #000;
+}
+body.ts .nav-links a:hover { color: var(--ts-ember-hot); }
+
+/* ==========================================================================
+   HERO — logotype, spotlights, horde
+   ========================================================================== */
+.ts-hero {
+  position: relative;
+  margin: 6px 0 54px;
+  padding: clamp(26px, 6vw, 56px) 0 4px;
+  text-align: center;
+  overflow: hidden;                        /* keep the beams inside the page */
+  isolation: isolate;
+}
+
+/* two rooftop spotlights raking down into the dark */
+.ts-hero .beam {
+  position: absolute;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgba(255, 143, 54, 0.16), transparent 82%);
+  clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
+  filter: blur(8px);
+}
+.ts-hero .beam.l { left: 1%;  transform: rotate(-7deg); }
+.ts-hero .beam.r { right: 1%; transform: rotate(7deg); }
+
+/* --- the logotype ------------------------------------------------------- */
+body.ts .doc h1.ts-logo {
+  --ts-size: clamp(1.3rem, 12vw, 4.6rem);
+  position: relative;
+  margin: 0;
+  font-family: var(--ts-pixel);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.ts-word {
+  position: relative;
+  display: block;
+  font-family: var(--ts-pixel);
+  font-size: var(--ts-size);
+  white-space: nowrap;
+}
+/* chiselled stone: hard outline, deep extrusion, cast shadow */
+.ts-turn {
+  color: var(--ts-bone);
+  text-shadow:
+    -0.04em 0 0 #241a12,  0.04em 0 0 #241a12,
+     0 -0.04em 0 #241a12,
+     0 0.045em 0 #6b5945,
+     0 0.09em  0 #3d3125,
+     0 0.135em 0 #241a12,
+     0 0.18em  0 #150f0a,
+     0 0.24em 0.18em rgba(0, 0, 0, 0.85);
+}
+.ts-siege {
+  color: var(--ts-ember);
+  text-shadow:
+    -0.04em 0 0 #2a1207,  0.04em 0 0 #2a1207,
+     0 -0.04em 0 #2a1207,
+     0 0.045em 0 #a83a10,
+     0 0.09em  0 #6d2409,
+     0 0.135em 0 #3a1305,
+     0 0.18em  0 #1d0902,
+     0 0.24em 0.2em rgba(0, 0, 0, 0.85),
+     0 0 0.7em rgba(239, 90, 31, 0.45);
+  margin-top: 0.12em;
+}
+/* top-lit bevel on the stone face */
+.ts-word::before {
+  content: attr(data-word);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, transparent 42%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  text-shadow: none;                       /* never repaint the extrusion */
+  pointer-events: none;
+}
+/* weathered stone: dark grime clipped to the glyphs (no blend modes — the
+   fixed scanline layer sits in the same stacking context) */
+.ts-word::after {
+  content: attr(data-word);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.34' numOctaves='3' seed='7'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.09 0 0 0 0 0.06 0 0 0 0 0.04 1.2 0 0 0 -0.62'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+  -webkit-background-clip: text;
+          background-clip: text;
+  text-shadow: none;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* blood running off the logotype */
+.ts-drips {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 6vw, 54px);
+  height: 22px;
+  margin-top: -0.12em;
+  padding: 0 8%;
+}
+.ts-drips i {
+  width: 3px;
+  background: linear-gradient(to bottom, rgba(126, 26, 16, 0.95), rgba(126, 26, 16, 0));
+}
+.ts-drips i:nth-child(1) { height: 55%; }
+.ts-drips i:nth-child(2) { height: 100%; }
+.ts-drips i:nth-child(3) { height: 38%; }
+.ts-drips i:nth-child(4) { height: 76%; }
+.ts-drips i:nth-child(5) { height: 30%; }
+
+/* --- subtitle plate ------------------------------------------------------ */
+.ts-plate {
+  display: inline-block;
+  margin: 22px 0 0;
+  padding: 12px 22px;
+  font-family: var(--ts-pixel);
+  font-size: clamp(0.52rem, 2.1vw, 0.78rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ts-bone);
+  background:
+    radial-gradient(circle 2px at 9px 9px,             var(--ts-rivet) 100%, transparent 0),
+    radial-gradient(circle 2px at calc(100% - 9px) 9px, var(--ts-rivet) 100%, transparent 0),
+    radial-gradient(circle 2px at 9px calc(100% - 9px), var(--ts-rivet) 100%, transparent 0),
+    radial-gradient(circle 2px at calc(100% - 9px) calc(100% - 9px), var(--ts-rivet) 100%, transparent 0),
+    linear-gradient(180deg, #2b2620, #171310);
+  border: 2px solid #000;
+  box-shadow: 0 0 0 1px rgba(234, 217, 189, 0.10) inset,
+              0 8px 24px -10px rgba(0, 0, 0, 0.9);
+  text-shadow: 2px 2px 0 #000;
+}
+
+/* --- the horde --------------------------------------------------------- */
+.ts-horde {
+  position: relative;
+  height: 76px;
+  margin-top: 22px;
+  background-repeat: repeat-x;
+  background-position: center bottom;
+  background-size: auto 56px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='28' shape-rendering='crispEdges'%3E%3Cg fill='%23100d0b'%3E%3Crect x='7' y='7' width='6' height='5'/%3E%3Crect x='6' y='12' width='8' height='16'/%3E%3Crect x='3' y='9' width='3' height='4'/%3E%3Crect x='14' y='8' width='3' height='5'/%3E%3Crect x='27' y='9' width='6' height='5'/%3E%3Crect x='26' y='14' width='8' height='14'/%3E%3Crect x='23' y='12' width='3' height='4'/%3E%3Crect x='34' y='11' width='3' height='4'/%3E%3Crect x='47' y='6' width='6' height='5'/%3E%3Crect x='46' y='11' width='8' height='17'/%3E%3Crect x='43' y='8' width='3' height='5'/%3E%3Crect x='54' y='9' width='3' height='4'/%3E%3C/g%3E%3C/svg%3E");
+  image-rendering: pixelated;
+  filter: drop-shadow(0 -2px 0 rgba(239, 90, 31, 0.35));
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+}
+.ts-horde::before {                     /* back row, smaller and hazier */
+  content: "";
+  position: absolute;
+  inset: 0 0 16px;
+  background-repeat: repeat-x;
+  background-position: 21px bottom;
+  background-size: auto 38px;
+  background-image: inherit;
+  opacity: 0.55;
+  filter: blur(0.4px);
+}
+.ts-horde::after {                      /* ground line the crowd stands on */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(239, 90, 31, 0.55), transparent);
+}
+
+/* ==========================================================================
+   DOC BODY — briefing panels
+   ========================================================================== */
+body.ts .doc { padding-top: 40px; }
+body.ts .breadcrumb {
+  font-family: var(--ts-pixel);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  text-shadow: 1px 1px 0 #000;
+}
+body.ts .breadcrumb:hover { color: var(--ts-ember-hot); }
+
+body.ts .doc p,
+body.ts .doc li { color: var(--muted); }
+body.ts .doc strong { color: var(--ts-bone-hi); }
+
+.ts-intro { max-width: 74ch; margin-inline: auto; }
+.ts-intro p { font-size: 1.02rem; }
+
+/* warning-tape callout */
+.ts-note {
+  position: relative;
+  margin: 26px auto 0;
+  padding: 18px 20px 18px 22px;
+  max-width: 74ch;
+  background: linear-gradient(180deg, rgba(239, 90, 31, 0.10), rgba(239, 90, 31, 0.03));
+  border: 1px solid rgba(239, 90, 31, 0.34);
+  border-left: 0;
+  font-size: 0.95rem;
+}
+.ts-note::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 8px;
+  background: repeating-linear-gradient(45deg,
+              var(--ts-ember) 0 6px, #100d0b 6px 12px);
+}
+
+/* panels */
+.ts-panel {
+  position: relative;
+  margin: 30px auto 0;
+  max-width: 74ch;
+  padding: 26px 26px 24px;
+  background:
+    radial-gradient(circle 2.5px at 12px 12px,              var(--ts-rivet) 100%, transparent 0),
+    radial-gradient(circle 2.5px at calc(100% - 12px) 12px, var(--ts-rivet) 100%, transparent 0),
+    radial-gradient(circle 2.5px at 12px calc(100% - 12px), var(--ts-rivet) 100%, transparent 0),
+    radial-gradient(circle 2.5px at calc(100% - 12px) calc(100% - 12px), var(--ts-rivet) 100%, transparent 0),
+    linear-gradient(180deg, rgba(30, 24, 20, 0.92), rgba(16, 13, 11, 0.92));
+  border: 2px solid #000;
+  box-shadow: 0 0 0 1px rgba(234, 217, 189, 0.08) inset,
+              0 18px 40px -26px #000;
+}
+.ts-panel::before {                     /* lit top edge */
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(239, 90, 31, 0.65), transparent);
+}
+
+/* section headings — numbered like a mission log */
+body.ts .doc .container { counter-reset: ts-sec; }
+body.ts .ts-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-family: var(--ts-pixel);
+  font-size: clamp(0.62rem, 2.4vw, 0.82rem);
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ts-bone-hi);
+  text-shadow: 2px 2px 0 #000;
+}
+body.ts .ts-panel h2::before {
+  counter-increment: ts-sec;
+  content: counter(ts-sec, decimal-leading-zero);
+  flex: none;
+  padding: 5px 7px;
+  font-size: 0.72em;
+  color: var(--ink-on-volt);
+  background: var(--ts-ember);
+  box-shadow: 0 2px 0 var(--ts-lava);
+  text-shadow: none;
+}
+
+/* lists — pixel ammo markers */
+body.ts .doc ul { padding-left: 0; list-style: none; }
+body.ts .doc li {
+  position: relative;
+  padding-left: 24px;
+  margin-bottom: 12px;
+}
+body.ts .doc li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.6em;
+  width: 8px;
+  height: 8px;
+  background: var(--ts-ember);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.9);
+}
+body.ts .doc li:last-child { margin-bottom: 0; }
+
+/* links + code */
+body.ts .doc a {
+  color: var(--ts-ember-hot);
+  border-bottom: 2px solid rgba(239, 90, 31, 0.55);
+  word-break: break-word;
+}
+body.ts .doc a:hover {
+  background: rgba(239, 90, 31, 0.18);
+  color: var(--ts-bone-hi);
+  border-bottom-color: var(--ts-ember-hot);
+}
+body.ts code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--ts-toxic);
+  background: rgba(143, 174, 75, 0.12);
+  border: 1px solid rgba(143, 174, 75, 0.25);
+  padding: 1px 6px;
+}
+
+/* HUD chip (last-updated) */
+.ts-chip {
+  display: inline-block;
+  margin: 18px 0 0;
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: rgba(10, 9, 8, 0.7);
+  border: 1px solid var(--line-2);
+}
+.ts-chip b { color: var(--ts-ember-hot); font-weight: 600; }
+
+/* contact CTA */
+.ts-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.ts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 18px;
+  font-family: var(--ts-pixel);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ts-bone-hi);
+  background: linear-gradient(180deg, #2b2620, #17130f);
+  border: 2px solid #000;
+  box-shadow: 0 0 0 1px rgba(234, 217, 189, 0.10) inset, 0 4px 0 #000;
+  text-shadow: 2px 2px 0 #000;
+  transition: transform 0.12s steps(2), color 0.2s, box-shadow 0.12s steps(2);
+}
+body.ts .doc a.ts-btn { color: var(--ts-bone-hi); border-bottom: 2px solid #000; }
+body.ts .doc a.ts-btn.primary { color: var(--ink-on-volt); }
+body.ts .doc a.ts-btn:hover { background-color: transparent; }
+.ts-btn:hover {
+  color: var(--ts-ember-hot);
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(239, 90, 31, 0.5) inset, 0 6px 0 #000;
+  background: linear-gradient(180deg, #34291f, #1b1410);
+}
+.ts-btn.primary {
+  color: var(--ink-on-volt);
+  background: linear-gradient(180deg, var(--ts-ember-hot), var(--ts-ember));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22) inset, 0 4px 0 var(--ts-lava);
+  text-shadow: none;
+}
+body.ts .doc a.ts-btn.primary:hover {
+  color: var(--ink-on-volt);
+  background: linear-gradient(180deg, #ffa050, var(--ts-ember-hot));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) inset, 0 6px 0 var(--ts-lava);
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+body.ts .footer {
+  position: relative;
+  margin-top: 70px;
+  border-top: 0;
+  background: linear-gradient(180deg, rgba(16, 13, 11, 0), rgba(6, 5, 5, 0.9));
+}
+body.ts .footer::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 8px;
+  background: repeating-linear-gradient(45deg,
+              var(--ts-ember) 0 10px, #0a0908 10px 20px);
+  opacity: 0.75;
+}
+body.ts .footer a,
+body.ts .footer p {
+  font-family: var(--ts-pixel);
+  font-size: 0.54rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 2;
+}
+body.ts .footer a:hover { color: var(--ts-ember-hot); }
+
+/* ==========================================================================
+   RESPONSIVE / MOTION
+   ========================================================================== */
+@media (max-width: 620px) {
+  .ts-panel { padding: 22px 18px 20px; }
+  .ts-horde { height: 52px; margin-top: 14px; background-size: auto 36px; }
+  .ts-hero .beam { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ts-embers { display: none; }
+}
