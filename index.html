@@ -93,8 +93,8 @@
     <!-- ============================ TICKER ============================ -->
     <div class="ticker" aria-hidden="true">
       <div class="ticker-track">
-        <span>Swift</span><span>SwiftUI</span><span>Digital Identity</span><span>ISO 18013</span><span>Verifiable Credentials</span><span>Secure Architecture</span><span>Objective-C</span><span>Godot</span><span>Performance</span><span>NFC</span><span>Biometrics</span>
-        <span>Swift</span><span>SwiftUI</span><span>Digital Identity</span><span>ISO 18013</span><span>Verifiable Credentials</span><span>Secure Architecture</span><span>Objective-C</span><span>Godot</span><span>Performance</span><span>NFC</span><span>Biometrics</span>
+        <span>Swift</span><span>SwiftUI</span><span>Digital Identity</span><span>ISO 18013</span><span>Verifiable Credentials</span><span>Secure Architecture</span><span>Objective-C</span><span>Godot</span><span>TypeScript</span><span>Cloudflare Workers</span><span>Performance</span><span>NFC</span><span>Biometrics</span>
+        <span>Swift</span><span>SwiftUI</span><span>Digital Identity</span><span>ISO 18013</span><span>Verifiable Credentials</span><span>Secure Architecture</span><span>Objective-C</span><span>Godot</span><span>TypeScript</span><span>Cloudflare Workers</span><span>Performance</span><span>NFC</span><span>Biometrics</span>
       </div>
     </div>
 
@@ -115,7 +115,7 @@
             <div class="stat-label">Companies</div>
           </div>
           <div class="stat">
-            <div class="stat-num"><span data-count="4">0</span></div>
+            <div class="stat-num"><span data-count="5">0</span></div>
             <div class="stat-label">Open-Source Repos</div>
           </div>
         </div>
@@ -148,7 +148,9 @@
             maintainability aren't features but the product itself.</p>
 
             <p>After hours I keep the craft playful: a pixel-art virtual pet that teaches kids
-            math in SwiftUI, an isometric defense game in Godot, and open-source tooling for
+            math in SwiftUI, two Godot games — an isometric defense game and a remake of a
+            2015 title whose source was lost — an open-source leaderboard backend on
+            Cloudflare Workers meant to hold every one of their scoreboards, and tooling for
             testing identity-wallet interoperability. Whatever the project, the through-line is
             the same — a strong focus on <strong>UI and custom-built components</strong>, choosing
             the right approach for each specific need rather than the fashionable one.</p>
@@ -262,8 +264,8 @@
             <div class="card-media ph ph-game"><span class="ph-glyph">►</span><span class="ph-label">SwiftUI Game</span></div>
             <div class="card-body">
               <div class="card-idx">BUILD // 01</div>
-              <h3><a href="/support/sumo.html">Sumo</a></h3>
-              <p>Virtual-pet learning game for iOS. A child opens a mystery pack and cares for its mascot by completing short bursts of multiple-choice math, with invisibly adaptive difficulty. Local-only, no accounts, no ads — cheerful pixel-art for ages 4–12.</p>
+              <h3><a href="https://apps.apple.com/app/sumo-math-virtual-pet/id6789571035" target="_blank" rel="noopener">Sumo<span class="ext">↗</span></a></h3>
+              <p>Virtual-pet learning game, live on the App Store. A child opens a mystery pack and cares for its mascot by completing short bursts of multiple-choice math, with invisibly adaptive difficulty. Local-only, no accounts, no ads — cheerful pixel-art for ages 4–12.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">SwiftUI</span><span class="tag">Education</span><span class="tag">Kids</span></div>
             </div>
           </article>
@@ -272,16 +274,36 @@
             <div class="card-media ph ph-game"><span class="ph-glyph">►</span><span class="ph-label">Godot 4</span></div>
             <div class="card-body">
               <div class="card-idx">BUILD // 02</div>
+              <h3>Jumpy Chewie (Remake)</h3>
+              <p>Godot 4 remake of my 2015 SpriteKit game, rebuilt from surviving marketing art after the original source was lost. You are a blob of gum clinging to the rim of a monster's mouth: gravity drags you down while teeth ride the rim trying to chew you. Portrait, one thumb, endless — score is jumps survived. No physics engine anywhere: the rim is a one-dimensional looping track traced from the artwork's alpha channel.</p>
+              <div class="tags"><span class="tag">Godot</span><span class="tag">Game Dev</span><span class="tag">iOS</span><span class="tag">Android</span></div>
+            </div>
+          </article>
+
+          <article class="card project reveal" data-cat="ios games">
+            <div class="card-media ph ph-game"><span class="ph-glyph">►</span><span class="ph-label">Godot 4</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 03</div>
               <h3>Turn Siege</h3>
               <p>Fast-loading, bite-sized isometric defense game built with Godot 4. Your gas station sits on a four-front battlefield but you can only cover two fronts at once — swipe to spin the view and bring your guns to bear. Fully procedural graphics and daily streak rewards.</p>
               <div class="tags"><span class="tag">Godot</span><span class="tag">Game Dev</span><span class="tag">iOS</span></div>
             </div>
           </article>
 
+          <article class="card project reveal" data-cat="oss">
+            <div class="card-media ph ph-oss"><span class="ph-glyph">&lt;/&gt;</span><span class="ph-label">Open Source</span></div>
+            <div class="card-body">
+              <div class="card-idx">BUILD // 04</div>
+              <h3><a href="https://github.com/gelemias/leaderboard-platform" target="_blank" rel="noopener">Leaderboard Platform<span class="ext">↗</span></a></h3>
+              <p>Open-source leaderboard backend on Cloudflare Workers and D1 — one scoreboard for all my games. Runs start from a server-issued, one-shot session bound to a game, player and ruleset, and submissions carry an input trace that an optional per-ruleset simulator replays before a score is allowed to count. Daily, weekly and all-time boards, a public game catalogue and rate-limited read feeds.</p>
+              <div class="tags"><span class="tag">Open Source</span><span class="tag">TypeScript</span><span class="tag">Cloudflare Workers</span><span class="tag">Backend</span></div>
+            </div>
+          </article>
+
           <article class="card project reveal" data-cat="oss identity">
             <div class="card-media ph ph-oss"><span class="ph-glyph">&lt;/&gt;</span><span class="ph-label">Open Source</span></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 03</div>
+              <div class="card-idx">BUILD // 05</div>
               <h3><a href="https://github.com/gelemias/mdoc-verifier" target="_blank" rel="noopener">mdoc-verifier<span class="ext">↗</span></a></h3>
               <p>Open-source FastAPI demo verifier for ISO 18013 web-retrieval flows — generates <code>mdoc://</code> QR deep links, derives session keys and exchanges encrypted CBOR DeviceRequests to test wallet interoperability for PhotoID-style requests.</p>
               <div class="tags"><span class="tag">Open Source</span><span class="tag">Python</span><span class="tag">ISO 18013</span><span class="tag">Identity</span></div>
@@ -291,7 +313,7 @@
           <article class="card project reveal" data-cat="oss">
             <div class="card-media ph ph-oss"><span class="ph-glyph">&lt;/&gt;</span><span class="ph-label">Open Source</span></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 04</div>
+              <div class="card-idx">BUILD // 06</div>
               <h3><a href="https://github.com/gelemias/b64img" target="_blank" rel="noopener">b64img<span class="ext">↗</span></a></h3>
               <p>Simple, no-frills base64 image decoder — paste an encoded string, get your image back.</p>
               <div class="tags"><span class="tag">Open Source</span><span class="tag">Utility</span></div>
@@ -301,7 +323,7 @@
           <article class="card project reveal" data-cat="ios identity">
             <div class="card-media ph ph-id"><span class="ph-glyph">◈</span><span class="ph-label">Digital Identity</span></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 05</div>
+              <div class="card-idx">BUILD // 07</div>
               <h3><a href="https://apps.apple.com/pl/app/ips-id-wallet/id6758149983" target="_blank" rel="noopener">ID Wallet<span class="ext">↗</span></a></h3>
               <p>Secure digital-identity wallet for managing verifiable credentials and identity documents — identity proofing through document scanning, NFC passport/ID verification and biometric authentication, with consent-driven attribute sharing.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Identity</span><span class="tag">NFC</span><span class="tag">Biometrics</span></div>
@@ -311,7 +333,7 @@
           <article class="card project reveal" data-cat="ios identity">
             <div class="card-media ph ph-id"><span class="ph-glyph">◈</span><span class="ph-label">Digital Identity</span></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 06</div>
+              <div class="card-idx">BUILD // 08</div>
               <h3><a href="https://www.idemia.com/mobile-id" target="_blank" rel="noopener">Mobile ID<span class="ext">↗</span></a></h3>
               <p>A contactless, highly secure, government-approved personal credential living on the user's smartphone. Multi-modular components distributed as an SDK for integrators or as a theme-able application.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">SDK</span><span class="tag">Security</span></div>
@@ -321,7 +343,7 @@
           <article class="card project reveal" data-cat="oss">
             <div class="card-media"><img src="/assets/img/tGlider.webp" loading="lazy" decoding="async" alt="RDGliderViewController — draggable glider control demo"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 07</div>
+              <div class="card-idx">BUILD // 09</div>
               <h3><a href="https://github.com/gelemias/RDGliderViewController" target="_blank" rel="noopener">RDGliderViewController<span class="ext">↗</span></a></h3>
               <p>Open-source responsive control, written in both Swift and Objective-C, for a draggable view controller gliding over another view controller.</p>
               <div class="tags"><span class="tag">Open Source</span><span class="tag">Swift</span><span class="tag">Objective-C</span></div>
@@ -331,7 +353,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media"><img src="/assets/img/tTmo.webp" loading="lazy" decoding="async" alt="T-Mobile Tuesdays app screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 08</div>
+              <div class="card-idx">BUILD // 10</div>
               <h3><a href="https://www.t-mobiletuesdays.com/" target="_blank" rel="noopener">T-Mobile Tuesdays<span class="ext">↗</span></a></h3>
               <p>Highly acclaimed US app offering vouchers and discounts to users — reached the Top 50 in the App Store several times.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Consumer</span></div>
@@ -341,7 +363,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media"><img src="/assets/img/tDrive.webp" loading="lazy" decoding="async" alt="TomTom MyDrive route-planning screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 09</div>
+              <div class="card-idx">BUILD // 11</div>
               <h3><a href="https://www.tomtom.com/" target="_blank" rel="noopener">TomTom MyDrive<span class="ext">↗</span></a></h3>
               <p>TomTom's client for the MyDrive service — plan a route from your device, then read it on your navigation device.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Navigation</span></div>
@@ -351,9 +373,9 @@
           <article class="card project reveal" data-cat="ios games">
             <div class="card-media"><img src="/assets/img/tJumpy.webp" loading="lazy" decoding="async" alt="Jumpy Chewie game screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 10</div>
-              <h3>Jumpy Chewie</h3>
-              <p>Universal game for iOS built with SpriteKit, featuring Game Center connectivity, push notifications and in-app purchases.</p>
+              <div class="card-idx">BUILD // 12</div>
+              <h3>Jumpy Chewie (2015)</h3>
+              <p>The original: a universal game for iOS built with SpriteKit, featuring Game Center connectivity, push notifications and in-app purchases. Its source was lost — hence the remake above.</p>
               <div class="tags"><span class="tag">SpriteKit</span><span class="tag">Game Center</span></div>
             </div>
           </article>
@@ -361,7 +383,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media"><img src="/assets/img/tUrban.webp" loading="lazy" decoding="async" alt="UrbanForms mural-map screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 11</div>
+              <div class="card-idx">BUILD // 13</div>
               <h3>UrbanForms</h3>
               <p>Companion app for the yearly urban-art festival in Łódź, Poland — navigate every mural painted in the city, get to know the art and stay up to date with the event.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Maps</span><span class="tag">Urban Art</span></div>
@@ -371,7 +393,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media"><img src="/assets/img/tMiga.webp" loading="lazy" decoding="async" alt="MigawKarta transport app screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 12</div>
+              <div class="card-idx">BUILD // 14</div>
               <h3>MigawKarta</h3>
               <p>Tracking for all public transport in Łódź, including management of the local "Migawka" travel card — expiration alerts, news, timetable changes and payment history.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Transport</span></div>
@@ -381,7 +403,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media"><img src="/assets/img/tUle.webp" loading="lazy" decoding="async" alt="iULE university app screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 13</div>
+              <div class="card-idx">BUILD // 15</div>
               <h3>iULE</h3>
               <p>App for the University of León integrating dashboards, lists and account screens so students and professors can better manage their lessons.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Education</span></div>
@@ -391,7 +413,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media"><img src="/assets/img/tDb.webp" loading="lazy" decoding="async" alt="Deutsche Bank Summit iPad app welcome screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 14</div>
+              <div class="card-idx">BUILD // 16</div>
               <h3>Deutsche Bank Summit</h3>
               <p>iPad ad-hoc app helping executives manage their relationships with delegates and attendees at the Summit conference.</p>
               <div class="tags"><span class="tag">iPad</span><span class="tag">Enterprise</span></div>
@@ -401,7 +423,7 @@
           <article class="card project reveal" data-cat="">
             <div class="card-media"><img src="/assets/img/tHp.webp" loading="lazy" decoding="async" alt="HP Designjet print-preview utility screen"></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 15</div>
+              <div class="card-idx">BUILD // 17</div>
               <h3>HP ePrint &amp; Share</h3>
               <p>HP ePrint service for printing documents via tablets, smartphones, laptops and printers, alongside desktop utilities for large-format HP printers.</p>
               <div class="tags"><span class="tag">WPF</span><span class="tag">C#</span></div>
@@ -411,7 +433,7 @@
           <article class="card project reveal" data-cat="ios">
             <div class="card-media ph ph-oss"><span class="ph-glyph">⬡</span><span class="ph-label">Framework</span></div>
             <div class="card-body">
-              <div class="card-idx">BUILD // 16</div>
+              <div class="card-idx">BUILD // 18</div>
               <h3>Blizzability</h3>
               <p>Framework for apps dynamically driven from a CMS — personalizing module loads and optimizing offline data handling.</p>
               <div class="tags"><span class="tag">iOS</span><span class="tag">Framework</span></div>
@@ -433,7 +455,14 @@
         <div class="spec-group reveal">
           <h3>Mobile &amp; Languages</h3>
           <div class="chips">
-            <span class="chip">Swift</span><span class="chip">SwiftUI</span><span class="chip">Objective-C</span><span class="chip">Cocoa Touch</span><span class="chip">Python</span><span class="chip">C#</span><span class="chip">C++</span><span class="chip">JavaScript</span>
+            <span class="chip">Swift</span><span class="chip">SwiftUI</span><span class="chip">Objective-C</span><span class="chip">Cocoa Touch</span><span class="chip">Python</span><span class="chip">C#</span><span class="chip">C++</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">GDScript</span>
+          </div>
+        </div>
+
+        <div class="spec-group reveal">
+          <h3>Backend &amp; Platform</h3>
+          <div class="chips">
+            <span class="chip">Cloudflare Workers</span><span class="chip">D1 / SQLite</span><span class="chip">REST APIs</span><span class="chip">FastAPI</span><span class="chip">Rate Limiting</span><span class="chip">Server-Side Validation</span>
           </div>
         </div>
 
