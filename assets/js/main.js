@@ -7,6 +7,8 @@
 
   var reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   /* --- theme toggle (light / dark) ----------------------------------------- */
   var THEME_KEY = "grd-theme";
@@ -20,7 +22,7 @@
     return themeMedia.matches ? "light" : "dark";
   };
   var syncMeta = function () {
-    if (themeMeta) themeMeta.setAttribute("content", effectiveTheme() === "light" ? "#f0f0ec" : "#08080a");
+    if (themeMeta) themeMeta.setAttribute("content", effectiveTheme() === "light" ? "#f2f0eb" : "#1b1a18");
   };
   syncMeta();
 
@@ -70,7 +72,7 @@
       "Architecting government-grade digital identity.",
       "Building high-quality, secure mobile software.",
       "Crafting custom UI, the right way.",
-      "iOS Engineer. Runner. F1 at heart."
+      "iOS engineer. Runner. Maker of small games."
     ];
     if (reduceMotion) {
       typeEl.textContent = roles[0];
@@ -91,14 +93,16 @@
     }
   }
 
-  /* --- scroll progress bar -------------------------------------------------- */
+  /* --- scroll progress bar + nav glass -------------------------------------- */
   var progress = document.getElementById("progress");
+  var navEl = document.querySelector(".nav");
   var onScroll = function () {
+    var h = document.documentElement;
     if (progress) {
-      var h = document.documentElement;
       var max = h.scrollHeight - h.clientHeight;
       progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
     }
+    if (navEl) navEl.classList.toggle("is-scrolled", h.scrollTop > 24);
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
@@ -165,17 +169,76 @@
 
   /* --- project filter ------------------------------------------------------- */
   var filters = document.querySelectorAll(".filter");
-  var cards = document.querySelectorAll("#grid .card");
+  var cards = document.querySelectorAll(".work-grid .card");
   filters.forEach(function (btn) {
     btn.addEventListener("click", function () {
       var f = btn.getAttribute("data-filter");
       filters.forEach(function (b) { b.classList.toggle("active", b === btn); });
+      var shown = 0;
       cards.forEach(function (card) {
         var cats = card.getAttribute("data-cat") || "";
         var show = f === "all" || cats.split(" ").indexOf(f) !== -1;
         card.classList.toggle("hide", !show);
+        card.classList.remove("refilter");
+        if (show && !reduceMotion) {
+          card.style.setProperty("--i", String(shown++));
+          void card.offsetWidth;              // restart the entry animation
+          card.classList.add("refilter");
+        }
       });
     });
   });
+
+  /* --- liquid metal + glass tilt --------------------------------------------
+     One delegated pointer listener writes --mx/--my (sheen origin) on whatever
+     control is under the cursor, and --rx/--ry (tilt) on project cards. The
+     CSS interpolates --mx/--my, so the highlight trails the pointer.         */
+  var TRACK = ".btn, .filter, .chip, .theme-toggle, .card";
+  var TILT = ".work-grid .card, .cols .card";
+  var MAX_TILT = 4.5;                          // degrees — restraint is the point
+
+  if (finePointer && window.PointerEvent) {
+    var tracked = null;
+    var latest = null;
+    var queued = false;
+
+    var release = function (el) {
+      el.style.removeProperty("--rx");
+      el.style.removeProperty("--ry");
+      el.style.setProperty("--mx", "50%");
+      el.style.setProperty("--my", "50%");
+    };
+
+    var apply = function () {
+      queued = false;
+      if (!tracked || !latest) return;
+      var r = tracked.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var x = (latest.clientX - r.left) / r.width;
+      var y = (latest.clientY - r.top) / r.height;
+      tracked.style.setProperty("--mx", (x * 100).toFixed(2) + "%");
+      tracked.style.setProperty("--my", (y * 100).toFixed(2) + "%");
+      if (!reduceMotion && tracked.matches(TILT)) {
+        tracked.style.setProperty("--rx", ((0.5 - y) * MAX_TILT).toFixed(2) + "deg");
+        tracked.style.setProperty("--ry", ((x - 0.5) * MAX_TILT).toFixed(2) + "deg");
+      }
+    };
+
+    document.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      var el = ev.target && ev.target.closest ? ev.target.closest(TRACK) : null;
+      if (el !== tracked) {
+        if (tracked) release(tracked);
+        tracked = el;
+      }
+      if (!el) return;
+      latest = ev;
+      if (!queued) { queued = true; requestAnimationFrame(apply); }
+    }, { passive: true });
+
+    document.addEventListener("pointerleave", function () {
+      if (tracked) { release(tracked); tracked = null; }
+    });
+  }
 
 })();
