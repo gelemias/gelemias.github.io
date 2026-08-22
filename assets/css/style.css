@@ -1,8 +1,18 @@
 /* ==========================================================================
    GUILLERMO RD — "TELEMETRY"
    Driver-dossier portfolio. Asphalt + volt. F1 / running / urban-art inspired.
+   Minimal surface, tactile details: liquid-metal controls, glass cards that
+   tilt under the pointer, sheen that follows the cursor.
    Self-contained apart from Google Fonts (loaded in <head>).
    ========================================================================== */
+
+/* Registered custom properties — these interpolate, which is what makes the
+   metal sheen lag behind the pointer instead of snapping to it. Browsers
+   without @property still render everything; the highlight just tracks
+   instantly. */
+@property --mx { syntax: "<percentage>"; initial-value: 50%; inherits: true; }
+@property --my { syntax: "<percentage>"; initial-value: 50%; inherits: true; }
+@property --spin { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
 
 :root {
   --ink:      #08080a;   /* asphalt */
@@ -29,6 +39,27 @@
   --radius-lg:22px;
   --max:      1160px;
   --ease:     cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io:  cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* --- metal & glass ---------------------------------------------------
+     Derived from --surface/--text so the app skins (sumo, turn-siege) and
+     the light theme inherit a coherent alloy without redeclaring anything. */
+  --sheen:       rgba(255, 255, 255, 0.62);
+  --metal-edge:  var(--line-2);
+  --metal-face:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--surface) 84%, #ffffff 16%) 0%,
+      color-mix(in srgb, var(--surface) 96%, #ffffff  4%) 42%,
+      color-mix(in srgb, var(--surface) 88%, #000000 12%) 100%);
+  --metal-relief:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 20%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #000000 26%, transparent),
+    0 1px 2px color-mix(in srgb, #000000 34%, transparent);
+  --metal-relief-hi:
+    inset 0 1px 0 color-mix(in srgb, #ffffff 34%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #000000 30%, transparent),
+    0 10px 26px -14px color-mix(in srgb, #000000 80%, transparent);
+  --glass-tint:  color-mix(in srgb, var(--surface) 82%, transparent);
 
   --font-display: "Anton", "Arial Narrow", sans-serif;
   --font-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
@@ -58,6 +89,7 @@
   --cyan:     #0b7c8e;   /* readable teal for inline code on light */
   --glow-a:   #dfff8a;
   --glow-b:   #cdeff2;
+  --sheen:    rgba(255, 255, 255, 0.95);
   color-scheme: light;
 }
 @media (prefers-color-scheme: light) {
@@ -77,6 +109,7 @@
     --cyan:     #0b7c8e;
     --glow-a:   #dfff8a;
     --glow-b:   #cdeff2;
+    --sheen:    rgba(255, 255, 255, 0.95);
     color-scheme: light;
   }
 }
@@ -106,10 +139,10 @@ body::before {                 /* engineering grid */
   background-image:
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at 50% 30%, #000 0%, transparent 78%);
-  -webkit-mask-image: radial-gradient(circle at 50% 30%, #000 0%, transparent 78%);
-  opacity: 0.5;
+  background-size: 76px 76px;
+  mask-image: radial-gradient(circle at 50% 26%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(circle at 50% 26%, #000 0%, transparent 72%);
+  opacity: 0.3;
 }
 body::after {                  /* film grain */
   content: "";
@@ -117,7 +150,7 @@ body::after {                  /* film grain */
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.022;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -139,10 +172,20 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(16px) saturate(120%);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
-  background: color-mix(in srgb, var(--ink) 72%, transparent);
-  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(14px) saturate(118%);
+  -webkit-backdrop-filter: blur(14px) saturate(118%);
+  background: color-mix(in srgb, var(--ink) 58%, transparent);
+  border-bottom: 1px solid transparent;
+  transition: background 0.4s var(--ease), border-color 0.4s var(--ease),
+              box-shadow 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+}
+/* set by JS once the page has scrolled past the hero fold */
+.nav.is-scrolled {
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  background: color-mix(in srgb, var(--ink) 82%, transparent);
+  border-bottom-color: var(--line);
+  box-shadow: 0 12px 34px -26px #000;
 }
 .nav-inner {
   display: flex;
@@ -185,6 +228,18 @@ img { max-width: 100%; display: block; }
   margin-right: 5px;
   transition: color 0.25s var(--ease);
 }
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--volt), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { transform: scaleX(1); }
 .nav-links a:hover,
 .nav-links a.active { color: var(--text); }
 .nav-links a:hover::before,
@@ -203,20 +258,46 @@ img { max-width: 100%; display: block; }
 
 /* theme toggle */
 .theme-toggle {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 34px;
   height: 34px;
   padding: 0;
-  border: 1px solid var(--line-2);
-  border-radius: 9px;
+  border: 1px solid var(--metal-edge);
+  border-radius: 10px;
   background: var(--surface);
+  background-image: var(--metal-face);
+  box-shadow: var(--metal-relief);
   color: var(--text);
   cursor: pointer;
-  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.2s var(--ease);
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease),
+              transform 0.25s var(--ease), box-shadow 0.25s var(--ease),
+              --mx 0.5s var(--ease), --my 0.5s var(--ease);
 }
-.theme-toggle:hover { border-color: var(--volt); color: var(--accent); transform: translateY(-1px); }
+.theme-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(40px 30px at var(--mx) var(--my),
+    color-mix(in srgb, var(--sheen) 55%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.theme-toggle:hover {
+  border-color: color-mix(in srgb, var(--volt) 55%, var(--metal-edge));
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--metal-relief-hi);
+}
+.theme-toggle:hover::after { opacity: 1; }
+.theme-toggle:active { transform: translateY(0) scale(0.94); }
+.theme-toggle svg { transition: transform 0.5s var(--ease); }
+.theme-toggle:hover svg { transform: rotate(18deg); }
 .theme-toggle svg { width: 16px; height: 16px; fill: currentColor; }
 .theme-toggle .i-sun { display: none; }
 .theme-toggle .i-moon { display: block; }
@@ -256,9 +337,17 @@ img { max-width: 100%; display: block; }
 }
 
 /* ==========================================================================
-   BUTTONS
+   BUTTONS — liquid metal
+   A milled face (--metal-face) under two pointer-driven layers: a slow conic
+   band that reads as brushed alloy, and a specular blob that follows the
+   cursor. Both are fed --mx/--my by main.js; because those are registered
+   custom properties they interpolate, so the highlight trails the pointer
+   like something viscous instead of snapping.
    ========================================================================== */
 .btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   gap: 9px;
@@ -269,21 +358,82 @@ img { max-width: 100%; display: block; }
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  border: 1px solid var(--line-2);
+  border: 1px solid var(--metal-edge);
   color: var(--text);
   background: var(--surface);
-  transition: transform 0.25s var(--ease), border-color 0.25s var(--ease),
-              background 0.25s var(--ease), color 0.25s var(--ease);
+  background-image: var(--metal-face);
+  box-shadow: var(--metal-relief);
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease),
+              box-shadow 0.35s var(--ease), color 0.35s var(--ease),
+              --mx 0.5s var(--ease), --my 0.5s var(--ease);
 }
 .btn svg { width: 16px; height: 16px; fill: currentColor; }
-.btn:hover { transform: translateY(-3px); border-color: var(--line-2); }
-.btn-primary {
-  background: var(--volt-fill);
-  color: #05050a;
-  border-color: var(--volt-fill);
-  box-shadow: 0 8px 30px -10px var(--volt-fill);
+
+/* brushed band — parked until hover, then it turns slowly */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  z-index: -1;
+  background: conic-gradient(from var(--spin) at var(--mx) var(--my),
+    transparent 0deg,
+    color-mix(in srgb, var(--sheen) 55%, transparent) 32deg,
+    transparent 78deg,
+    transparent 168deg,
+    color-mix(in srgb, var(--sheen) 30%, transparent) 206deg,
+    transparent 250deg);
+  filter: blur(14px);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
 }
-.btn-primary:hover { box-shadow: 0 14px 40px -10px var(--volt); }
+/* specular pool riding the cursor */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(90px 54px at var(--mx) var(--my),
+    color-mix(in srgb, var(--sheen) 60%, transparent), transparent 72%);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+.btn:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--text) 26%, var(--metal-edge));
+  box-shadow: var(--metal-relief-hi);
+}
+.btn:hover::before { opacity: 0.9; animation: metal-turn 7s linear infinite; }
+.btn:hover::after  { opacity: 1; }
+.btn:active {
+  transform: translateY(-1px) scale(0.985);
+  box-shadow: inset 0 2px 6px color-mix(in srgb, #000 46%, transparent);
+}
+@keyframes metal-turn { to { --spin: 360deg; } }
+
+/* the one place volt still fills a whole shape — same liquid treatment,
+   struck in neon instead of steel */
+.btn-primary {
+  color: #05050a;
+  border-color: color-mix(in srgb, var(--volt-fill) 70%, #000);
+  background-image: linear-gradient(180deg,
+    color-mix(in srgb, var(--volt-fill) 82%, #ffffff 18%) 0%,
+    var(--volt-fill) 46%,
+    color-mix(in srgb, var(--volt-fill) 84%, #000000 16%) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 8px 26px -14px var(--volt-fill);
+}
+.btn-primary::before { filter: blur(18px); }
+.btn-primary::after {
+  background: radial-gradient(90px 54px at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.75), transparent 72%);
+}
+.btn-primary:hover {
+  border-color: color-mix(in srgb, var(--volt-fill) 70%, #000);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 16px 38px -16px var(--volt);
+}
 
 /* ==========================================================================
    HERO
@@ -297,13 +447,15 @@ img { max-width: 100%; display: block; }
   position: absolute;
   width: 620px; height: 620px;
   border-radius: 50%;
-  filter: blur(130px);
-  opacity: 0.28;
+  filter: blur(140px);
+  opacity: 0.2;
   pointer-events: none;
   z-index: 0;
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .hero-glow.a { background: var(--glow-a);  top: -220px; right: -120px; }
-.hero-glow.b { background: var(--glow-b);  bottom: -260px; left: -160px; opacity: 0.16; }
+.hero-glow.b { background: var(--glow-b);  bottom: -260px; left: -160px; opacity: 0.11; }
 
 .hero .container { position: relative; z-index: 2; }
 
@@ -410,33 +562,46 @@ img { max-width: 100%; display: block; }
    TICKER (timing tower / ticker tape)
    ========================================================================== */
 .ticker {
-  border-block: 1px solid #000;
-  background: var(--volt-fill);
+  position: relative;
+  border-block: 1px solid var(--line);
+  background:
+    repeating-linear-gradient(90deg,
+      color-mix(in srgb, #ffffff 3%, transparent) 0 1px, transparent 1px 3px),
+    var(--metal-face);
   overflow: hidden;
   white-space: nowrap;
-  transform: rotate(-1.4deg) scale(1.04);
-  margin: 10px 0;
+  margin: 8px 0;
+}
+/* fade the strip into the page at both ends — no hard cut, no tilt */
+.ticker::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg,
+    var(--ink) 0%, transparent 14%, transparent 86%, var(--ink) 100%);
 }
 .ticker-track {
   display: inline-flex;
   align-items: center;
   gap: 0;
-  padding: 12px 0;
-  animation: marquee 32s linear infinite;
+  padding: 13px 0;
+  animation: marquee 42s linear infinite;
   will-change: transform;
 }
 .ticker-track span {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  font-size: 1.15rem;
-  letter-spacing: 0.03em;
-  color: #07070a;
-  padding: 0 26px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  padding: 0 22px;
   display: inline-flex;
   align-items: center;
-  gap: 26px;
+  gap: 22px;
 }
-.ticker-track span::after { content: "●"; font-size: 0.5rem; color: #07070a; }
+.ticker-track span::after { content: "●"; font-size: 0.34rem; color: var(--volt); }
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* ==========================================================================
@@ -575,6 +740,12 @@ section { position: relative; padding: 96px 0; }
   position: relative;
 }
 .lap:last-child { border-bottom: 1px solid var(--line); }
+/* the row lights from the left as you pass over it */
+.lap { transition: background 0.45s var(--ease); }
+.lap:hover {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--surface) 78%, transparent), transparent 58%);
+}
 .lap-num {
   font-family: var(--font-display);
   font-size: 2.4rem;
@@ -610,14 +781,15 @@ section { position: relative; padding: 96px 0; }
   padding: 2px 12px;
 }
 .lap-body { color: var(--muted); margin: 0; }
-.lap-body ul { margin: 14px 0 0; padding: 0; list-style: none; }
-.lap-body li {
+/* the list is a sibling of .lap-body, not a child — scope to .lap */
+.lap ul { margin: 14px 0 0; padding: 0; list-style: none; }
+.lap li {
   position: relative;
   padding-left: 22px;
   margin-bottom: 8px;
   color: var(--muted);
 }
-.lap-body li::before {
+.lap li::before {
   content: "›";
   position: absolute;
   left: 4px;
@@ -635,6 +807,9 @@ section { position: relative; padding: 96px 0; }
   margin-bottom: 34px;
 }
 .filter {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   letter-spacing: 0.06em;
@@ -645,10 +820,53 @@ section { position: relative; padding: 96px 0; }
   border-radius: 999px;
   padding: 8px 16px;
   cursor: pointer;
-  transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background 0.2s var(--ease);
+  transition: color 0.3s var(--ease), border-color 0.3s var(--ease),
+              box-shadow 0.3s var(--ease), transform 0.3s var(--ease),
+              --mx 0.45s var(--ease), --my 0.45s var(--ease);
 }
-.filter:hover { color: var(--text); border-color: var(--line-2); }
-.filter.active { color: #05050a; background: var(--volt-fill); border-color: var(--volt-fill); }
+.filter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: var(--metal-face);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.filter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(70px 40px at var(--mx) var(--my),
+    color-mix(in srgb, var(--sheen) 45%, transparent), transparent 72%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.filter:hover {
+  color: var(--text);
+  border-color: var(--metal-edge);
+  transform: translateY(-2px);
+  box-shadow: var(--metal-relief);
+}
+.filter:hover::before,
+.filter:hover::after { opacity: 1; }
+.filter:active { transform: translateY(0) scale(0.97); }
+.filter.active {
+  color: var(--ink-on-volt, #05050a);
+  border-color: color-mix(in srgb, var(--volt-fill) 70%, #000);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+.filter.active::before {
+  opacity: 1;
+  background-image: linear-gradient(180deg,
+    color-mix(in srgb, var(--volt-fill) 84%, #ffffff 16%),
+    color-mix(in srgb, var(--volt-fill) 86%, #000000 14%));
+}
+.filter.active::after {
+  background: radial-gradient(70px 40px at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.6), transparent 72%);
+}
 
 .grid {
   display: grid;
@@ -664,7 +882,8 @@ section { position: relative; padding: 96px 0; }
   border-radius: var(--radius);
   padding: 26px 24px 22px;
   overflow: hidden;
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease);
+  transition: transform 0.28s var(--ease), border-color 0.3s var(--ease),
+              background 0.3s var(--ease), box-shadow 0.4s var(--ease);
 }
 .card::before {
   content: "";
@@ -677,11 +896,34 @@ section { position: relative; padding: 96px 0; }
   transition: transform 0.35s var(--ease);
 }
 .card:hover {
-  transform: translateY(-6px);
+  --lift: -6px;
   border-color: var(--line-2);
   background: var(--surface-2);
+  box-shadow: 0 26px 54px -38px #000;
 }
 .card:hover::before { transform: scaleY(1); }
+
+/* glass pane: a glare that follows the pointer, plus a specular band that
+   sweeps once across the card as it comes under the cursor */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(330px 240px at var(--mx) var(--my),
+      color-mix(in srgb, var(--sheen) 15%, transparent), transparent 66%),
+    linear-gradient(115deg, transparent 42%,
+      color-mix(in srgb, var(--sheen) 20%, transparent) 50%, transparent 58%);
+  background-size: 100% 100%, 250% 100%;
+  background-position: 0 0, 125% 0;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease), background-position 1.1s var(--ease);
+}
+.card:hover::after { opacity: 1; background-position: 0 0, -25% 0; }
 .card-idx {
   font-family: var(--font-mono);
   font-size: 0.66rem;
@@ -813,15 +1055,36 @@ section { position: relative; padding: 96px 0; }
 .spec-group > h3::before { content: ""; width: 8px; height: 8px; background: var(--accent); transform: rotate(45deg); }
 .chips { display: flex; flex-wrap: wrap; gap: 9px; }
 .chip {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   font-size: 0.86rem;
   padding: 8px 15px;
-  border-radius: 8px;
+  border-radius: 9px;
   background: var(--surface);
   border: 1px solid var(--line);
   color: var(--text);
-  transition: border-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.2s var(--ease);
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease),
+              transform 0.3s var(--ease), box-shadow 0.3s var(--ease),
+              --mx 0.45s var(--ease), --my 0.45s var(--ease);
 }
-.chip:hover { border-color: var(--volt); color: var(--accent); transform: translateY(-2px); }
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(80px 44px at var(--mx) var(--my),
+    color-mix(in srgb, var(--sheen) 34%, transparent), transparent 72%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+.chip:hover {
+  border-color: color-mix(in srgb, var(--volt) 45%, var(--metal-edge));
+  color: var(--text);
+  transform: translateY(-2px);
+  box-shadow: var(--metal-relief);
+}
+.chip:hover::after { opacity: 1; }
 
 .cols {
   margin-top: 46px;
@@ -830,7 +1093,7 @@ section { position: relative; padding: 96px 0; }
   gap: 18px;
 }
 .cols .card { padding: 26px 24px; }
-.cols .card:hover { transform: translateY(-4px); }
+.cols .card:hover { --lift: -4px; }
 .cols .card h3 { color: var(--accent); font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; }
 .cols .card p { flex: initial; color: var(--muted); margin-bottom: 12px; }
 .cols .card p:last-child { margin-bottom: 0; }
@@ -888,11 +1151,18 @@ section { position: relative; padding: 96px 0; }
    REVEAL ANIMATIONS
    ========================================================================== */
 .reveal {
+  --rv-y: 26px;
+  --rv-rx: 7deg;
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transform: perspective(1200px) rotateX(var(--rv-rx)) translate3d(0, var(--rv-y), 0);
+  transform-origin: 50% 100%;
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
 }
-.reveal.in { opacity: 1; transform: none; }
+.reveal.in {
+  --rv-y: 0px;
+  --rv-rx: 0deg;
+  opacity: 1;
+}
 
 /* ==========================================================================
    DOCUMENT PAGES (privacy / support)
@@ -920,6 +1190,52 @@ section { position: relative; padding: 96px 0; }
   display: inline-block;
 }
 .breadcrumb:hover { color: var(--accent); }
+
+/* ==========================================================================
+   POINTER GLASS — 3D tilt
+   One composed transform per card, so the reveal offset, the pointer tilt and
+   the hover lift never fight over the same property. --rx / --ry are written
+   by main.js and only on fine pointers.
+   ========================================================================== */
+.card,
+.card.reveal {
+  transform:
+    perspective(1100px)
+    rotateX(calc(var(--rv-rx, 0deg) + var(--rx, 0deg)))
+    rotateY(var(--ry, 0deg))
+    translate3d(0, calc(var(--rv-y, 0px) + var(--lift, 0px)), 0);
+  transform-origin: 50% 50%;
+}
+
+/* re-entry when the garage filter changes */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: perspective(1100px) rotateX(6deg) translate3d(0, 16px, 0) scale(0.985);
+  }
+}
+#grid .card.refilter {
+  animation: card-in 0.5s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 30ms);
+}
+
+/* coarse pointers get the flat, quiet version — no glare left stuck on tap */
+@media (hover: none), (pointer: coarse) {
+  .card::after,
+  .btn::before,
+  .btn::after,
+  .filter::after,
+  .chip::after,
+  .theme-toggle::after { display: none; }
+}
+
+/* ==========================================================================
+   FOCUS
+   ========================================================================== */
+:where(a, button, .btn, .filter, .chip):focus-visible {
+  outline: 2px solid var(--volt);
+  outline-offset: 3px;
+}
 
 /* ==========================================================================
    RESPONSIVE
@@ -953,5 +1269,8 @@ section { position: relative; padding: 96px 0; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .reveal { opacity: 1; transform: none; }
+  .reveal { --rv-y: 0px; --rv-rx: 0deg; opacity: 1; }
+  .card,
+  .card.reveal,
+  .hero-glow { transform: none; }
 }

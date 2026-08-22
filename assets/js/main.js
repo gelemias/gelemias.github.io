@@ -7,6 +7,8 @@
 
   var reduceMotion = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   /* --- theme toggle (light / dark) ----------------------------------------- */
   var THEME_KEY = "grd-theme";
@@ -91,14 +93,16 @@
     }
   }
 
-  /* --- scroll progress bar -------------------------------------------------- */
+  /* --- scroll progress bar + nav glass -------------------------------------- */
   var progress = document.getElementById("progress");
+  var navEl = document.querySelector(".nav");
   var onScroll = function () {
+    var h = document.documentElement;
     if (progress) {
-      var h = document.documentElement;
       var max = h.scrollHeight - h.clientHeight;
       progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + "%";
     }
+    if (navEl) navEl.classList.toggle("is-scrolled", h.scrollTop > 24);
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
@@ -170,12 +174,100 @@
     btn.addEventListener("click", function () {
       var f = btn.getAttribute("data-filter");
       filters.forEach(function (b) { b.classList.toggle("active", b === btn); });
+      var shown = 0;
       cards.forEach(function (card) {
         var cats = card.getAttribute("data-cat") || "";
         var show = f === "all" || cats.split(" ").indexOf(f) !== -1;
         card.classList.toggle("hide", !show);
+        card.classList.remove("refilter");
+        if (show && !reduceMotion) {
+          card.style.setProperty("--i", String(shown++));
+          void card.offsetWidth;              // restart the entry animation
+          card.classList.add("refilter");
+        }
       });
     });
   });
+
+  /* --- liquid metal + glass tilt --------------------------------------------
+     One delegated pointer listener writes --mx/--my (sheen origin) on whatever
+     control is under the cursor, and --rx/--ry (tilt) on project cards. The
+     CSS interpolates --mx/--my, so the highlight trails the pointer.         */
+  var TRACK = ".btn, .filter, .chip, .theme-toggle, .card";
+  var TILT = "#grid .card, .cols .card";
+  var MAX_TILT = 4.5;                          // degrees — restraint is the point
+
+  if (finePointer && window.PointerEvent) {
+    var tracked = null;
+    var latest = null;
+    var queued = false;
+
+    var release = function (el) {
+      el.style.removeProperty("--rx");
+      el.style.removeProperty("--ry");
+      el.style.setProperty("--mx", "50%");
+      el.style.setProperty("--my", "50%");
+    };
+
+    var apply = function () {
+      queued = false;
+      if (!tracked || !latest) return;
+      var r = tracked.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var x = (latest.clientX - r.left) / r.width;
+      var y = (latest.clientY - r.top) / r.height;
+      tracked.style.setProperty("--mx", (x * 100).toFixed(2) + "%");
+      tracked.style.setProperty("--my", (y * 100).toFixed(2) + "%");
+      if (!reduceMotion && tracked.matches(TILT)) {
+        tracked.style.setProperty("--rx", ((0.5 - y) * MAX_TILT).toFixed(2) + "deg");
+        tracked.style.setProperty("--ry", ((x - 0.5) * MAX_TILT).toFixed(2) + "deg");
+      }
+    };
+
+    document.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      var el = ev.target && ev.target.closest ? ev.target.closest(TRACK) : null;
+      if (el !== tracked) {
+        if (tracked) release(tracked);
+        tracked = el;
+      }
+      if (!el) return;
+      latest = ev;
+      if (!queued) { queued = true; requestAnimationFrame(apply); }
+    }, { passive: true });
+
+    document.addEventListener("pointerleave", function () {
+      if (tracked) { release(tracked); tracked = null; }
+    });
+  }
+
+  /* --- hero glows drift with the pointer ------------------------------------ */
+  var glows = document.querySelectorAll(".hero-glow");
+  if (glows.length && finePointer && !reduceMotion) {
+    var heroEl = document.querySelector(".hero");
+    var heroVisible = true;
+    if ("IntersectionObserver" in window && heroEl) {
+      new IntersectionObserver(function (entries) {
+        heroVisible = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(heroEl);
+    }
+    var glowQueued = false, glowEv = null;
+    var moveGlows = function () {
+      glowQueued = false;
+      if (!glowEv || !heroVisible) return;
+      var dx = (glowEv.clientX / window.innerWidth) - 0.5;
+      var dy = (glowEv.clientY / window.innerHeight) - 0.5;
+      glows.forEach(function (g, i) {
+        var k = i === 0 ? 34 : -26;
+        g.style.setProperty("--px", (dx * k).toFixed(1) + "px");
+        g.style.setProperty("--py", (dy * k).toFixed(1) + "px");
+      });
+    };
+    window.addEventListener("pointermove", function (ev) {
+      if (ev.pointerType === "touch") return;
+      glowEv = ev;
+      if (!glowQueued) { glowQueued = true; requestAnimationFrame(moveGlows); }
+    }, { passive: true });
+  }
 
 })();
