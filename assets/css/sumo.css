@@ -30,12 +30,12 @@ body.sumo {
   --text:      var(--su-navy);
   --muted:     #56537d;
   --muted-2:   #7d7aa6;
-  --volt:      var(--su-pink);
-  --volt-fill: var(--su-yellow);
-  --volt-dim:  var(--su-lilac);
+  --tone:      var(--su-pink);
+  --tone-fill: var(--su-yellow);
+  --tone-dim:  var(--su-lilac);
   --accent:    var(--su-pink-d);
-  --ink-on-volt: var(--su-navy);
-  --cyan:      #2f7fa0;
+  --ink-on-tone: var(--su-navy);
+  --tone-2:      #2f7fa0;
   --signal:    var(--su-pink-d);
 
   --su-pixel: "Press Start 2P", "Courier New", monospace;

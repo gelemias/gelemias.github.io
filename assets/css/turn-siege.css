@@ -42,12 +42,12 @@ body.ts {
   --text:      var(--ts-bone-hi);
   --muted:     #b3a48d;
   --muted-2:   #7d7161;
-  --volt:      var(--ts-ember);
-  --volt-fill: var(--ts-ember);
-  --volt-dim:  var(--ts-lava);
+  --tone:      var(--ts-ember);
+  --tone-fill: var(--ts-ember);
+  --tone-dim:  var(--ts-lava);
   --accent:    var(--ts-ember-hot);
-  --ink-on-volt: #180a03;
-  --cyan:      var(--ts-toxic);
+  --ink-on-tone: #180a03;
+  --tone-2:      var(--ts-toxic);
   --signal:    var(--ts-blood);
 
   --ts-pixel: "Press Start 2P", "Courier New", monospace;
@@ -369,7 +369,7 @@ body.ts .ts-panel h2::before {
   flex: none;
   padding: 5px 7px;
   font-size: 0.72em;
-  color: var(--ink-on-volt);
+  color: var(--ink-on-tone);
   background: var(--ts-ember);
   box-shadow: 0 2px 0 var(--ts-lava);
   text-shadow: none;
@@ -453,7 +453,7 @@ body.ts code {
   transition: transform 0.12s steps(2), color 0.2s, box-shadow 0.12s steps(2);
 }
 body.ts .doc a.ts-btn { color: var(--ts-bone-hi); border-bottom: 2px solid #000; }
-body.ts .doc a.ts-btn.primary { color: var(--ink-on-volt); }
+body.ts .doc a.ts-btn.primary { color: var(--ink-on-tone); }
 body.ts .doc a.ts-btn:hover { background-color: transparent; }
 .ts-btn:hover {
   color: var(--ts-ember-hot);
@@ -462,13 +462,13 @@ body.ts .doc a.ts-btn:hover { background-color: transparent; }
   background: linear-gradient(180deg, #34291f, #1b1410);
 }
 .ts-btn.primary {
-  color: var(--ink-on-volt);
+  color: var(--ink-on-tone);
   background: linear-gradient(180deg, var(--ts-ember-hot), var(--ts-ember));
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22) inset, 0 4px 0 var(--ts-lava);
   text-shadow: none;
 }
 body.ts .doc a.ts-btn.primary:hover {
-  color: var(--ink-on-volt);
+  color: var(--ink-on-tone);
   background: linear-gradient(180deg, #ffa050, var(--ts-ember-hot));
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3) inset, 0 6px 0 var(--ts-lava);
 }

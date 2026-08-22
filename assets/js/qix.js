@@ -17,21 +17,26 @@
   "use strict";
 
   /* --- tuning -------------------------------------------------------------- */
-  var SPEED_CELLS = 30;          // marker cells per second
-  var QIX_SPEED   = 175;         // px per second
+  var SPEED_CELLS = 38;          // marker cells per second
+  var QIX_SPEED   = 165;         // px per second
   var QIX_TAIL    = 16;          // points kept for the Qix polyline
   var FREE = 0, CLAIMED = 1, TRAIL = 2;
   var STORE_KEY = "grd-play";
 
-  /* Each sector guards one section. `windows` are pre-cut so you can always
-     read what it is you are opening. */
+  /* One plate per page. `windows` are pre-cut so you can always read what it
+     is you are opening, and `num` follows the page's own tag rather than its
+     position, so the HUD and the page agree. Targets are a share of the field
+     LEFT after those windows — nine short rounds rather than six long ones. */
   var LEVELS = [
-    { id: "top",        name: "Ignition",   cut: 0.34, windows: [".hero-name", ".hero-kicker"] },
-    { id: "about",      name: "Dossier",    cut: 0.52, windows: [".sec-head"] },
-    { id: "experience", name: "Career",     cut: 0.52, windows: [".sec-head"] },
-    { id: "projects",   name: "Garage",     cut: 0.52, windows: [".sec-head"] },
-    { id: "skills",     name: "Spec",       cut: 0.52, windows: [".sec-head"] },
-    { id: "contact",    name: "Lights Out", cut: 0.44, windows: [".sec-tag"] }
+    { id: "intro",   num: "00", name: "Hello",   cut: 0.32, windows: [".intro-name", ".intro-kicker"] },
+    { id: "profile", num: "01", name: "Profile", cut: 0.42, windows: [".page-head"] },
+    { id: "path-a",  num: "02", name: "Path",    cut: 0.42, windows: [".page-head"] },
+    { id: "path-b",  num: "02", name: "Path",    cut: 0.38, windows: [".page-cont"] },
+    { id: "work-a",  num: "03", name: "Work",    cut: 0.42, windows: [".page-head"] },
+    { id: "work-b",  num: "03", name: "Work",    cut: 0.38, windows: [".page-cont"] },
+    { id: "work-c",  num: "03", name: "Work",    cut: 0.38, windows: [".page-cont"] },
+    { id: "toolkit", num: "04", name: "Toolkit", cut: 0.40, windows: [".page-head"] },
+    { id: "contact", num: "05", name: "Contact", cut: 0.34, windows: [".page-tag"] }
   ];
 
   var main = document.querySelector("main");
@@ -64,22 +69,34 @@
   function readPalette() {
     var cs = getComputedStyle(document.body);
     var pick = function (n, fb) { return (cs.getPropertyValue(n) || "").trim() || fb; };
-    palette.volt   = pick("--volt", "#d7ff2e");
-    palette.signal = pick("--signal", "#ff3b2e");
-    palette.cyan   = pick("--cyan", "#26e0e0");
+    palette.tone   = pick("--tone", "#7f9478");
+    palette.signal = pick("--signal", "#b0705a");
+    palette.tone2  = pick("--tone-2", "#6d8695");
+    /* The plate is a sheet of the same stock as the page, one shade further
+       from it: on paper a little darker, in the dark theme a little lighter.
+       Both stay quiet — the cut reads as depth and as type arriving, not as
+       contrast. */
+    var bg = pick("--ink", "#f2f0eb"), ink = pick("--text", "#2a2825");
+    // lifting a dark page reads much stronger than darkening a pale one, so
+    // the dark theme needs a smaller step to feel like the same sheet
+    var k = lum(bg) > 0.5 ? 1 : 0.62;
+    palette.plateLo = mix(bg, ink, 0.17 * k);
+    palette.plateHi = mix(bg, ink, 0.10 * k);
   }
 
-  /* The plate is a physical sheet lying on the page, so it stays dark steel in
-     both themes: over the dark site it reads as metal in a dark room, over the
-     light one as a sheet you are cutting through. Either way what shows in the
-     hole is unmistakably the page and not more plate. */
-  var PLATE_LO = "#0c0c10";
-  var PLATE_HI = "#1c1c23";
-  function luminance(hex) {
-    var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex.trim());
-    if (!m) return 0;
-    return (parseInt(m[1], 16) * 0.299 + parseInt(m[2], 16) * 0.587 +
-            parseInt(m[3], 16) * 0.114) / 255;
+  function rgbOf(c) {
+    var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(String(c).trim());
+    return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : null;
+  }
+  function lum(c) {
+    var x = rgbOf(c);
+    return x ? (x[0] * 0.299 + x[1] * 0.587 + x[2] * 0.114) / 255 : 0;
+  }
+  function mix(a, b, t) {
+    var x = rgbOf(a), y = rgbOf(b);
+    if (!x || !y) return a;
+    var c = function (i) { return Math.round(x[i] + (y[i] - x[i]) * t); };
+    return "rgb(" + c(0) + "," + c(1) + "," + c(2) + ")";
   }
 
   /* ==========================================================================
@@ -125,7 +142,7 @@
     var hud = document.createElement("div");
     hud.className = "qx-hud";
     hud.innerHTML =
-      '<span class="qx-name"><span class="num">' + pad(this.index - 1) + '</span>' +
+      '<span class="qx-name"><span class="num">' + esc(this.def.num) + '</span>' +
       esc(this.def.name) + '</span>' +
       '<span class="qx-bar"><i></i><b></b></span>' +
       '<span class="qx-pct">0%</span>' +
@@ -141,8 +158,8 @@
       this.hint.innerHTML =
         "<span>Cut it open</span>" +
         '<span class="sub">Arrows or drag. Run along the edge, push into the ' +
-        "plate to draw, close the line back on the edge. Whatever the Qix can " +
-        "no longer reach falls away.</span>";
+        "sheet to draw, close the line back on the edge. Whatever the drifter " +
+        "can no longer reach falls away — and the page scrolls on.</span>";
       wrap.appendChild(this.hint);
     }
 
@@ -245,7 +262,7 @@
       if (!node) return;
       var r = node.getBoundingClientRect();
       if (!r.width || !r.height) return;
-      var pad = 16;
+      var pad = 22;
       var x0 = Math.floor((r.left - box.left - pad - self.ox) / self.cell);
       var y0 = Math.floor((r.top - box.top - pad - self.oy) / self.cell);
       var x1 = Math.ceil((r.right - box.left + pad - self.ox) / self.cell);
@@ -536,32 +553,25 @@
 
     // milled steel: flat base, a soft vertical roll, brushed grain, one
     // diagonal sheen and a vignette to sit it into the page
-    ctx.fillStyle = PLATE_LO;
+    ctx.fillStyle = palette.plateLo;
     ctx.fillRect(0, 0, this.w, this.h);
     var g = ctx.createLinearGradient(0, 0, 0, this.h);
-    g.addColorStop(0, PLATE_HI);
-    g.addColorStop(0.45, PLATE_LO);
-    g.addColorStop(1, PLATE_HI);
+    g.addColorStop(0, palette.plateHi);
+    g.addColorStop(0.45, palette.plateLo);
+    g.addColorStop(1, palette.plateHi);
     ctx.globalAlpha = 0.8;
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, this.w, this.h);
     ctx.globalAlpha = 1;
 
-    ctx.fillStyle = "rgba(255,255,255,0.045)";
+    ctx.fillStyle = "rgba(255,255,255,0.06)";
     for (var bx = 0; bx < this.w; bx += 3) ctx.fillRect(bx, 0, 1, this.h);
 
     var sheen = ctx.createLinearGradient(0, this.h, this.w, 0);
     sheen.addColorStop(0, "rgba(255,255,255,0)");
-    sheen.addColorStop(0.5, "rgba(255,255,255,0.04)");
+    sheen.addColorStop(0.5, "rgba(255,255,255,0.18)");
     sheen.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = sheen;
-    ctx.fillRect(0, 0, this.w, this.h);
-
-    var vig = ctx.createRadialGradient(this.w / 2, this.h / 2, Math.min(this.w, this.h) * 0.2,
-                                       this.w / 2, this.h / 2, Math.max(this.w, this.h) * 0.75);
-    vig.addColorStop(0, "rgba(0,0,0,0)");
-    vig.addColorStop(1, "rgba(0,0,0,0.5)");
-    ctx.fillStyle = vig;
     ctx.fillRect(0, 0, this.w, this.h);
 
     // and cut out everything already claimed — full alpha, or destination-out
@@ -603,7 +613,7 @@
     for (var f = 0; f < this.flashes.length; f++) {
       var fl = this.flashes[f];
       ctx.globalAlpha = (fl.t / fl.life) * 0.5;
-      ctx.fillStyle = palette.volt;
+      ctx.fillStyle = palette.tone;
       for (var k = 0; k < fl.cells.length; k++) {
         var idx = fl.cells[k];
         ctx.fillRect((idx % this.cols) * c, ((idx / this.cols) | 0) * c, c, c);
@@ -621,7 +631,7 @@
       for (var t = 0; t < this.trail.length; t++) {
         ctx.lineTo((this.trail[t].x + 0.5) * c, (this.trail[t].y + 0.5) * c);
       }
-      ctx.strokeStyle = palette.volt;
+      ctx.strokeStyle = palette.tone;
       ctx.globalAlpha = 0.22;
       ctx.lineWidth = Math.max(6, c * 1.1);
       ctx.stroke();
@@ -633,7 +643,7 @@
     // the Qix
     var q = this.qix;
     if (q.tail.length > 1) {
-      ctx.strokeStyle = palette.cyan;
+      ctx.strokeStyle = palette.tone2;
       ctx.beginPath();
       for (var i = 0; i < q.tail.length; i++) {
         var p = q.tail[i];
@@ -651,7 +661,7 @@
     }
 
     // the marker
-    var mc = this.drawing ? palette.volt : "#ffffff";
+    var mc = this.drawing ? palette.tone : palette.signal;
     ctx.fillStyle = mc;
     ctx.globalAlpha = 0.25;
     ctx.fillRect(this.px * c - c, this.py * c - c, c * 3, c * 3);
