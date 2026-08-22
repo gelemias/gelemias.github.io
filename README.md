@@ -17,10 +17,29 @@ Plain static HTML/CSS site served by GitHub Pages — no build step, no dependen
 │   ├── index.html              # Contact details and app directory
 │   ├── sumo.html               # Per-app support page
 │   └── turn-siege.html         # Per-app support page
-├── assets/                     # Stylesheet and images
+├── assets/                     # Stylesheets, scripts and images
 ├── apple-app-site-association  # Universal links configuration
 └── binding/                    # Mobile ID binding landing page
 ```
+
+## The play shell (`assets/js/qix.js`)
+
+The portfolio ships behind Qix-style metal plates: you steer a marker along the
+edge of what you have claimed, push into the plate to draw, and close the line
+back on an edge — everything the Qix can no longer reach is cut away and the
+section underneath shows through. Claim enough of a sector and the rest
+dissolves and the next one unlocks.
+
+It is strictly an overlay. `index.html` is the ordinary portfolio and stays the
+only source of content, so the text is always in the DOM for search engines and
+screen readers. The shell steps aside entirely when JS is off, on
+`prefers-reduced-motion`, or once the reader presses **READ** in the nav — which
+is remembered, as is how far they got. The privacy and support pages never load
+it at all.
+
+Sectors, their targets and the headings pre-cut into each plate are the `LEVELS`
+table at the top of the file. A target is a share of the field *left* after the
+headings are cut, not of the whole plate.
 
 ## Adding a new app (App Store submission)
 

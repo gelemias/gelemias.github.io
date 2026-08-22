@@ -1,0 +1,154 @@
+/* ==========================================================================
+   GUILLERMO RD — "QIX"  ·  play-to-reveal shell
+   Layered on top of style.css. Every section of the portfolio ships behind a
+   dark metal plate; you cut territory out of it Qix-style and the content
+   underneath is what shows through. Nothing here is required to read the
+   site — with JS off, or on reduced-motion, or once the reader taps READ,
+   none of these rules apply and the page is the plain portfolio.
+   ========================================================================== */
+
+/* --- play mode ----------------------------------------------------------- */
+body[data-play="on"] .qx-hidden { display: none !important; }
+
+.qx-level { position: relative; }
+.qx-level.qx-locked { overflow: hidden; }
+
+/* the playfield sits over one screenful of the section it guards */
+.qx-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  touch-action: none;
+  cursor: crosshair;
+  opacity: 1;
+  transition: opacity 0.55s var(--ease);
+}
+.qx-wrap.qx-out { opacity: 0; pointer-events: none; }
+.qx-plate,
+.qx-fx {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* the rim light around everything you have cut open */
+.qx-plate {
+  filter: drop-shadow(0 0 9px color-mix(in srgb, var(--volt) 26%, transparent));
+}
+.qx-wrap.qx-hit .qx-plate {
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--signal) 60%, transparent));
+}
+
+/* --- playfield HUD -------------------------------------------------------- */
+.qx-hud {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(233, 234, 240, 0.6);
+  background: linear-gradient(to top, rgba(8, 8, 11, 0.9), transparent);
+  pointer-events: none;
+}
+.qx-hud .qx-name { color: #f2f3f6; }
+.qx-hud .qx-name .num { color: rgba(233, 234, 240, 0.42); margin-right: 8px; }
+.qx-hud .qx-bar {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+.qx-hud .qx-bar i {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  background: var(--volt);
+  box-shadow: 0 0 10px var(--volt);
+  transition: width 0.35s var(--ease);
+}
+/* the mark you have to reach */
+/* the mark you have to reach sits at the end of the run */
+.qx-hud .qx-bar b {
+  position: absolute;
+  right: 0;
+  top: -3px; bottom: -3px;
+  width: 1px;
+  background: rgba(233, 234, 240, 0.55);
+}
+.qx-hud .qx-pct { color: var(--volt); min-width: 9ch; text-align: right; }
+.qx-hud .qx-keys { margin-left: auto; color: rgba(233, 234, 240, 0.4); }
+
+/* --- first-run hint ------------------------------------------------------- */
+.qx-hint {
+  position: absolute;
+  left: 50%; top: 74%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 26px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #f2f3f6;
+  text-align: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s var(--ease);
+}
+.qx-hint.qx-out { opacity: 0; }
+.qx-hint .sub {
+  color: rgba(233, 234, 240, 0.6);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  max-width: 30ch;
+  line-height: 1.9;
+}
+
+/* --- nav additions -------------------------------------------------------- */
+.qx-mode {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.25s var(--ease), border-color 0.25s var(--ease);
+}
+.qx-mode:hover { color: var(--text); border-color: var(--metal-edge); }
+
+/* a link to a sector you have not cut open yet does not go anywhere */
+body[data-play="on"] .nav-links a.qx-lock {
+  opacity: 0.34;
+  pointer-events: none;
+}
+/* sectors already cleared keep a volt tick in the nav */
+body[data-play="on"] .nav-links a.qx-done::before { color: var(--volt); }
+
+@media (max-width: 720px) {
+  .qx-hud { gap: 12px; padding: 12px 18px; font-size: 0.6rem; letter-spacing: 0.1em; }
+  .qx-hud .qx-keys { display: none; }
+}
+
+/* --- never gate anyone out ------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .qx-wrap { display: none; }
+  .qx-level.qx-locked { overflow: visible; height: auto !important; }
+  body[data-play="on"] .qx-hidden { display: revert !important; }
+}
