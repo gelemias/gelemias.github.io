@@ -1,0 +1,507 @@
+/* ==========================================================================
+   JUMPY CHEWIE — game skin for the doc pages
+   Layered on top of style.css and activated with <body class="jc">.
+   Palette and motifs taken from the game itself (scripts/ui/design.gd):
+   the wet blue-dark inside of a monster's mouth, gum gold laid over it, a
+   rim of teeth, and the school notepad sheet the game prints its own reading
+   screens on — which is where a policy this long belongs.
+   The wordmark is the game's logo art; everything else is CSS.
+   ========================================================================== */
+
+/* Press Start 2P — SIL Open Font License 1.1, self-hosted (latin subset).
+   Licence text: /assets/fonts/OFL-press-start-2p.txt */
+@font-face {
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/press-start-2p-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                 U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+                 U+2215, U+FEFF, U+FFFD;
+}
+
+body.jc {
+  /* --- game palette, straight from Design ------------------------------- */
+  --jc-void:      #041220;   /* the throat, behind everything */
+  --jc-ink:       #0b2740;   /* the wet dark */
+  --jc-panel:     #102f4c;
+  --jc-panel-edge:#1d4a70;
+  --jc-gold:      #f9a51a;   /* Chewie, and the one accent */
+  --jc-gold-lit:  #ffc85a;
+  --jc-gold-deep: #c95a18;
+  --jc-rust:      #9c2b1f;
+  --jc-cream:     #fbf9f4;
+  --jc-mist:      #a8c4d8;
+  --jc-tooth:     #f4ecd8;
+  --jc-tooth-dim: #cdbd9b;
+  --jc-bubble:    #4fc9f0;
+  --jc-berry:     #e0483a;
+
+  /* the notepad sheet, re-inked exactly as paper_theme.tres is */
+  --jc-paper:        #fdfbf6;
+  --jc-paper-edge:   #cfc4ac;
+  --jc-paper-rule:   rgba(143, 182, 216, 0.62);
+  --jc-paper-margin: rgba(209, 104, 92, 0.68);
+  --jc-paper-punch:  #051a2c;
+  --jc-on-paper:     #16283a;
+  --jc-on-paper-dim: #4e6a83;
+  --jc-link-paper:   #15607f;
+
+  /* --- remap the site tokens so shared components inherit the theme ------ */
+  --ink:       var(--jc-void);
+  --ink-2:     #06192b;
+  --surface:   var(--jc-ink);
+  --surface-2: var(--jc-panel);
+  --line:      rgba(168, 196, 216, 0.12);
+  --line-2:    rgba(168, 196, 216, 0.24);
+  --text:      var(--jc-cream);
+  --muted:     var(--jc-mist);
+  --muted-2:   #6f92ac;
+  --tone:      var(--jc-gold);
+  --tone-fill: var(--jc-gold);
+  --tone-dim:  var(--jc-gold-deep);
+  --accent:    var(--jc-gold-lit);
+  --ink-on-tone: #4a1d06;
+  --tone-2:      var(--jc-bubble);
+  --signal:      var(--jc-berry);
+
+  --jc-pixel: "Press Start 2P", "Courier New", monospace;
+
+  color-scheme: dark;                       /* it is never bright in here */
+  background: var(--jc-void);
+  color: var(--text);
+}
+
+/* ==========================================================================
+   THE MOUTH — gum glow from below, wet sheen, drifting bubbles
+   ========================================================================== */
+/* soft flesh mottling — style.css leaves body::before free, so the skin can
+   claim it as one more fixed layer under everything */
+body.jc::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 18% 22%, rgba(156, 43, 31, 0.28) 0, transparent 42%),
+    radial-gradient(circle at 82% 12%, rgba(29, 74, 112, 0.42) 0, transparent 46%);
+}
+body.jc::after { opacity: 0.05; }            /* film grain, kept light */
+
+.jc-fx {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* the gum glow: Chewie's colour, rising off the bottom of the screen */
+.jc-fx .glow {
+  position: absolute;
+  left: 50%;
+  bottom: -34vh;
+  width: 150vw;
+  height: 74vh;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 100%,
+              rgba(249, 165, 26, 0.30) 0%,
+              rgba(201, 90, 24, 0.16) 34%,
+              transparent 70%);
+}
+
+/* two slow washes of saliva light across the upper half */
+.jc-fx .wet {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+}
+.jc-fx .wet.a {
+  left: -12vw; top: 6vh;
+  width: 52vw; height: 40vh;
+  background: radial-gradient(circle, rgba(79, 201, 240, 0.22), transparent 68%);
+  animation: jc-drift 26s var(--ease-io, ease-in-out) infinite alternate;
+}
+.jc-fx .wet.b {
+  right: -14vw; top: 30vh;
+  width: 46vw; height: 44vh;
+  background: radial-gradient(circle, rgba(255, 123, 196, 0.16), transparent 68%);
+  animation: jc-drift 34s var(--ease-io, ease-in-out) infinite alternate-reverse;
+}
+@keyframes jc-drift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(4vw, -5vh, 0) scale(1.14); }
+}
+
+/* bubbles, the way they come off the gum */
+.jc-bubbles { position: absolute; inset: 0; }
+.jc-bubbles i {
+  position: absolute;
+  bottom: -8vh;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%,
+              rgba(255, 255, 255, 0.85) 0 18%,
+              rgba(79, 201, 240, 0.42) 40%,
+              rgba(79, 201, 240, 0.10) 72%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  animation: jc-rise linear infinite;
+}
+@keyframes jc-rise {
+  0%   { opacity: 0;    transform: translate3d(0, 0, 0) scale(0.7); }
+  12%  { opacity: 0.42; }
+  80%  { opacity: 0.30; }
+  100% { opacity: 0;    transform: translate3d(3vw, -108vh, 0) scale(1.25); }
+}
+.jc-bubbles i:nth-child(1) { left:  6%; animation-duration: 19s; animation-delay:  0s;   width:  8px; height:  8px; }
+.jc-bubbles i:nth-child(2) { left: 17%; animation-duration: 25s; animation-delay: -6s;   width: 14px; height: 14px; }
+.jc-bubbles i:nth-child(3) { left: 29%; animation-duration: 22s; animation-delay: -13s;  width:  6px; height:  6px; }
+.jc-bubbles i:nth-child(4) { left: 41%; animation-duration: 30s; animation-delay: -3s;   width: 11px; height: 11px; }
+.jc-bubbles i:nth-child(5) { left: 57%; animation-duration: 21s; animation-delay: -17s;  width:  9px; height:  9px; }
+.jc-bubbles i:nth-child(6) { left: 68%; animation-duration: 27s; animation-delay: -9s;   width: 16px; height: 16px; }
+.jc-bubbles i:nth-child(7) { left: 79%; animation-duration: 23s; animation-delay: -21s;  width:  7px; height:  7px; }
+.jc-bubbles i:nth-child(8) { left: 91%; animation-duration: 32s; animation-delay: -12s;  width: 12px; height: 12px; }
+
+/* ==========================================================================
+   NAV
+   ========================================================================== */
+body.jc .nav { border-bottom-color: rgba(249, 165, 26, 0.22); }
+body.jc .nav-brand,
+body.jc .nav-links a { letter-spacing: 0.06em; }
+
+/* ==========================================================================
+   HERO — the wordmark, then a gum plate saying what this page is
+   ========================================================================== */
+body.jc .doc { padding-top: 46px; }
+
+.jc-hero {
+  position: relative;
+  text-align: center;
+  padding: 60px 0 4px;
+}
+
+/* THE RIM — the upper jaw the wordmark hangs under. Full-bleed, and it scrolls
+   away with the hero rather than following the reader down the page.
+   The element is the band of gum the teeth are set in — kept to the top few
+   pixels so that what shows *between* the teeth is the dark of the mouth and
+   not a stripe of red. The teeth are one conic wedge per tile, masked out of a
+   bone-coloured strip. Short and blunt rather than long and fine: 74deg over a
+   26px tooth in a 56px tile is the stubby cone the game's own art draws, and it
+   is the widest wedge that still leaves daylight between neighbours. */
+.jc-rim {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 100vw;
+  margin-left: -50vw;
+  height: 26px;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+              #8e3535 0 7px,
+              rgba(142, 53, 53, 0.5) 7px 11px,
+              transparent 11px);
+}
+.jc-rim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    var(--jc-tooth) 0%,
+    var(--jc-tooth) 44%,
+    var(--jc-tooth-dim) 100%);
+  -webkit-mask: conic-gradient(from -37deg at 50% 100%,
+                #000 0 74deg, transparent 74deg) 0 0 / 56px 100% repeat-x;
+  mask: conic-gradient(from -37deg at 50% 100%,
+        #000 0 74deg, transparent 74deg) 0 0 / 56px 100% repeat-x;
+  filter: drop-shadow(0 3px 5px rgba(4, 18, 32, 0.65));
+}
+
+body.jc .doc h1.jc-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+  font-size: 0;                              /* the art is the wordmark */
+}
+.jc-logo-img {
+  display: block;
+  width: min(560px, 84vw);
+  height: auto;
+  filter: drop-shadow(0 16px 30px rgba(4, 18, 32, 0.85))
+          drop-shadow(0 0 34px rgba(249, 165, 26, 0.22));
+}
+
+/* the plate: a slab of gum with the page's name pressed into it */
+.jc-plate {
+  display: inline-block;
+  padding: 13px 22px 11px;
+  font-family: var(--jc-pixel);
+  font-size: clamp(0.6rem, 2.5vw, 0.86rem);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #52200a;
+  background: linear-gradient(180deg, var(--jc-gold-lit) 0%, var(--jc-gold) 52%, var(--jc-gold-deep) 100%);
+  border: 3px solid #5e2409;
+  border-radius: 8px;
+  box-shadow: 0 5px 0 var(--jc-rust), 0 12px 26px -10px rgba(4, 18, 32, 0.9);
+  text-shadow: 0 1px 0 rgba(255, 240, 200, 0.55);
+}
+
+/* last-updated, as the game's own HUD chips read */
+.jc-chip {
+  display: inline-block;
+  margin: 22px 0 0;
+  padding: 8px 14px;
+  font-family: var(--jc-pixel);
+  font-size: 0.58rem;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--jc-mist);
+  background: rgba(16, 47, 76, 0.72);
+  border: 2px solid var(--jc-panel-edge);
+  border-radius: 6px;
+}
+body.jc .doc p.jc-chip { color: var(--jc-mist); }
+.jc-chip b { color: var(--jc-gold-lit); font-weight: 400; }
+
+/* ==========================================================================
+   THE DARK COPY — the little that is read off the flesh rather than the sheet
+   ========================================================================== */
+.jc-intro {
+  max-width: 72ch;
+  margin: 34px auto 0;
+}
+body.jc .jc-intro p { font-size: 1.02rem; color: var(--jc-mist); }
+body.jc .jc-intro strong { color: var(--jc-cream); }
+
+/* ==========================================================================
+   THE SHEET — a page of school notepad paper, punched for a binder, which is
+   what the game itself prints help, settings and its privacy copy on.
+   ========================================================================== */
+.jc-sheet {
+  position: relative;
+  max-width: 74ch;
+  margin: 30px auto 0;
+  padding: 30px 34px 30px 74px;
+  color: var(--jc-on-paper);
+  border: 1px solid var(--jc-paper-edge);
+  border-radius: 3px;
+  background-color: var(--jc-paper);
+  background-image:
+    /* three punches down the margin, at the game's own fractions */
+    radial-gradient(circle 9px at 40px 16%, var(--jc-paper-punch) 98%, transparent 100%),
+    radial-gradient(circle 9px at 40px 50%, var(--jc-paper-punch) 98%, transparent 100%),
+    radial-gradient(circle 9px at 40px 84%, var(--jc-paper-punch) 98%, transparent 100%),
+    /* bubblegum smudges — a wash, never in the margin */
+    radial-gradient(ellipse 120px 90px at 76% 22%, rgba(207, 143, 170, 0.10), transparent 70%),
+    radial-gradient(ellipse 90px 70px at 32% 78%, rgba(207, 143, 170, 0.08), transparent 70%),
+    /* the red margin rule */
+    linear-gradient(90deg, transparent 0 60px, var(--jc-paper-margin) 60px 62px, transparent 62px),
+    /* the sheet itself */
+    linear-gradient(180deg, #fdfbf6 0%, #f7f2e6 100%);
+  background-repeat: no-repeat;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 22px 44px -26px rgba(4, 18, 32, 0.95);
+}
+
+/* headings, in the game's rust, numbered the way its section rows are */
+body.jc .doc .container { counter-reset: jc-sec; }
+body.jc .jc-sheet h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 18px;
+  font-family: var(--jc-pixel);
+  font-size: clamp(0.62rem, 2.3vw, 0.8rem);
+  line-height: 1.6;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--jc-rust);
+}
+body.jc .jc-sheet h2::before {
+  counter-increment: jc-sec;
+  content: counter(jc-sec, decimal-leading-zero);
+  flex: none;
+  align-self: flex-start;
+  padding: 6px 7px 5px;
+  font-size: 0.74em;
+  color: #52200a;
+  background: var(--jc-gold);
+  border-radius: 4px;
+  box-shadow: 0 2px 0 var(--jc-gold-deep);
+}
+body.jc .jc-sheet h3 {
+  margin: 24px 0 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: var(--jc-on-paper);
+}
+
+/* Copy on the sheet: dark ink, and the pad's blue ruling.
+   The ruling is drawn on each block of copy rather than on the sheet, so a line
+   always lands *under* a line of text however tall the heading above it was.
+   Ruled on the sheet, one taped-on note is enough to knock every rule below it
+   half a line out and the page reads as struck through. */
+body.jc .jc-sheet p,
+body.jc .jc-sheet li {
+  color: var(--jc-on-paper-dim);
+  line-height: 30px;                         /* one rule */
+  background-image: repeating-linear-gradient(180deg,
+                    transparent 0 29px, var(--jc-paper-rule) 29px 30px);
+}
+body.jc .jc-sheet strong { color: var(--jc-on-paper); font-weight: 600; }
+body.jc .jc-sheet p { margin: 0 0 18px; }
+body.jc .jc-sheet p:last-child { margin-bottom: 0; }
+
+/* lists — a gum dot per line */
+body.jc .jc-sheet ul { padding-left: 0; list-style: none; margin: 0 0 14px; }
+body.jc .jc-sheet li { position: relative; padding-left: 22px; }
+body.jc .jc-sheet li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.82em;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--jc-gold);
+  box-shadow: 0 1px 0 var(--jc-gold-deep);
+}
+body.jc .jc-sheet ul:last-child { margin-bottom: 0; }
+
+/* links and code, inked for paper */
+body.jc .jc-sheet a {
+  color: var(--jc-link-paper);
+  border-bottom: 2px solid rgba(21, 96, 127, 0.35);
+  word-break: break-word;
+}
+body.jc .jc-sheet a:hover {
+  color: #0d3f55;
+  background: rgba(249, 165, 26, 0.22);
+  border-bottom-color: var(--jc-gold-deep);
+}
+body.jc .jc-sheet code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: #2f6d21;
+  background: rgba(124, 217, 74, 0.14);
+  border: 1px solid rgba(47, 109, 33, 0.24);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+/* the in-game path a reader is being sent to, set like the game's own labels */
+.jc-path {
+  font-family: var(--jc-pixel);
+  font-size: 0.64em;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--jc-rust);
+  white-space: nowrap;
+}
+
+/* a called-out note, taped to the sheet */
+.jc-note {
+  position: relative;
+  margin: 22px 0 0;
+  padding: 16px 18px 16px 20px;
+  font-size: 0.95rem;
+  background: rgba(249, 165, 26, 0.13);
+  border: 1px solid rgba(201, 90, 24, 0.34);
+  border-left: 6px solid var(--jc-gold);
+  border-radius: 3px;
+}
+body.jc .jc-sheet .jc-note p:last-child { margin-bottom: 0; }
+
+/* ==========================================================================
+   BUTTONS — the game's chunky gum keys
+   ========================================================================== */
+.jc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.jc-btn {
+  display: inline-block;
+  padding: 13px 20px 11px;
+  font-family: var(--jc-pixel);
+  font-size: 0.62rem;
+  line-height: 1.4;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: transform 0.12s var(--ease, ease), box-shadow 0.12s var(--ease, ease);
+}
+body.jc .doc a.jc-btn {
+  color: var(--jc-cream);
+  background: linear-gradient(180deg, #2a6fa8 0%, var(--jc-panel) 100%);
+  border: 2px solid #07366e;
+  border-bottom: 0;
+  box-shadow: 0 4px 0 #07366e;
+}
+body.jc .doc a.jc-btn.primary {
+  color: #52200a;
+  background: linear-gradient(180deg, var(--jc-gold-lit) 0%, var(--jc-gold) 100%);
+  border-color: #5e2409;
+  box-shadow: 0 4px 0 var(--jc-rust);
+}
+body.jc .doc a.jc-btn:hover {
+  background-color: transparent;
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #07366e;
+}
+body.jc .doc a.jc-btn.primary:hover { box-shadow: 0 2px 0 var(--jc-rust); }
+
+/* ==========================================================================
+   BREADCRUMB / FOOTER on the dark
+   ========================================================================== */
+body.jc .breadcrumb { color: var(--jc-mist); }
+body.jc .breadcrumb:hover { color: var(--jc-gold-lit); }
+body.jc .doc > .container > .breadcrumb { margin-bottom: 22px; }
+body.jc .footer { border-top-color: rgba(249, 165, 26, 0.18); }
+body.jc .footer a:hover { color: var(--jc-gold-lit); }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 620px) {
+  .jc-sheet {
+    padding: 24px 20px 24px 52px;
+    background-image:
+      radial-gradient(circle 7px at 26px 16%, var(--jc-paper-punch) 98%, transparent 100%),
+      radial-gradient(circle 7px at 26px 50%, var(--jc-paper-punch) 98%, transparent 100%),
+      radial-gradient(circle 7px at 26px 84%, var(--jc-paper-punch) 98%, transparent 100%),
+      radial-gradient(ellipse 100px 80px at 76% 22%, rgba(207, 143, 170, 0.10), transparent 70%),
+      radial-gradient(ellipse 80px 60px at 32% 78%, rgba(207, 143, 170, 0.08), transparent 70%),
+      linear-gradient(90deg, transparent 0 40px, var(--jc-paper-margin) 40px 42px, transparent 42px),
+      linear-gradient(180deg, #fdfbf6 0%, #f7f2e6 100%);
+  }
+  .jc-hero { padding-top: 44px; }
+  .jc-rim { height: 20px; }
+  .jc-rim::after {
+    -webkit-mask-size: 42px 100%;
+    mask-size: 42px 100%;
+  }
+  body.jc .jc-sheet h2 { gap: 10px; }
+  .jc-path { white-space: normal; }
+}
+
+/* ==========================================================================
+   REDUCED MOTION — the mouth holds still
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .jc-fx .wet,
+  .jc-bubbles i { animation: none; opacity: 0.28; }
+  body.jc .doc a.jc-btn:hover { transform: none; }
+}
