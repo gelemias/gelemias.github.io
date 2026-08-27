@@ -12,11 +12,13 @@ Plain static HTML/CSS site served by GitHub Pages — no build step, no dependen
 ├── privacy/
 │   ├── index.html              # General privacy policy and app directory
 │   ├── sumo.html               # Per-app privacy policy
-│   └── turn-siege.html         # Per-app privacy policy
+│   ├── turn-siege.html         # Per-app privacy policy
+│   └── jumpy-chewie.html       # Per-app privacy policy
 ├── support/
 │   ├── index.html              # Contact details and app directory
 │   ├── sumo.html               # Per-app support page
-│   └── turn-siege.html         # Per-app support page
+│   ├── turn-siege.html         # Per-app support page
+│   └── jumpy-chewie.html       # Per-app support page
 ├── assets/                     # Stylesheets, scripts and images
 ├── apple-app-site-association  # Universal links configuration
 └── binding/                    # Mobile ID binding landing page
